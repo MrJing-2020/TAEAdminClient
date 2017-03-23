@@ -1,15 +1,21 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-default/index.css'
+var VueResource = require('vue-resource');
+//import ElementUI from 'element-ui'
+//import 'element-ui/lib/theme-default/index.css'
+import { Button, Select } from 'element-ui'
 import App from './App.vue'
-import Mrjing from './Mrjing.vue'
+import Main from './Main.vue'
 
 Vue.use(VueRouter)
-Vue.use(ElementUI)
+Vue.use(VueResource)
+//Vue.use(ElementUI)
+Vue.use(Button)
+Vue.use(Select)
 
 const routes = [
-        { path: '/foo', component: Mrjing},
+        { path: '/', component: Main},
+        { path: '/foo', component: Main},
         { path: '/bar', component: App}
 ]
 // 3. 创建 router 实例，然后传 `routes` 配置
@@ -21,8 +27,10 @@ new Vue({
         el: '#app',
         // render: h => h(mrjing)
         components: {
-                'my-component': Mrjing,
+                'my-component': Main,
                 'my-component1': App
         },
         router
 }).$mount('#app')
+
+

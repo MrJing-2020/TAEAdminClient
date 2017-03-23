@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>TAEAdminClient</title>
+    <link href="src/assets/styles/bootstrap.min.css" rel="stylesheet"/>
+    <link href="src/assets/styles/font-awesome.css" rel="stylesheet"/>
+
+    <link href="src/assets/styles/theme.css" rel="stylesheet"/>
+    <link href="src/assets/styles/default.css" rel="stylesheet"/>
+</head>
+<body>
+<section class="body-sign" id="signinApp">
+    <div class="center-sign">
+        <div class="panel panel-sign">
+            <div class="panel-title-sign mt-xl text-right">
+                <h2 class="title text-uppercase text-weight-bold m-none"><i class="fa fa-user mr-xs"></i>登 录</h2>
+            </div>
+            <div class="panel-body">
+                <form action="index.html" method="post">
+                    <div class="form-group mb-lg">
+                        <label>用户名</label>
+
+                        <div class="input-group input-group-icon">
+                            <input name="username" v-model="userName" type="text" class="form-control input-lg"/>
+									<span class="input-group-addon">
+										<span class="icon icon-lg">
+											<i class="fa fa-user"></i>
+										</span>
+									</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-lg">
+                        <div class="clearfix">
+                            <label class="pull-left">密码</label>
+                        </div>
+                        <div class="input-group input-group-icon">
+                            <input name="pwd" v-model="passWord" type="password" class="form-control input-lg"/>
+									<span class="input-group-addon">
+										<span class="icon icon-lg">
+											<i class="fa fa-lock"></i>
+										</span>
+									</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="checkbox-custom checkbox-default">
+                                <input id="RememberMe" v-model="isRemember" name="rememberme" type="checkbox"/>
+                                <label for="RememberMe">记住密码</label>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 text-right">
+                            <button v-on:click.prevent="login" class="btn btn-primary hidden-xs">登录</button>
+                            <button v-on:click.prevent="login" class="btn btn-primary btn-block btn-lg visible-xs mt-lg">登录</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="src/assets/scripts/jquery.min.js"></script>
+<script src="src/assets/scripts/jquery.browser.mobile.js"></script>
+<script src="src/assets/scripts/bootstrap.min.js"></script>
+
+<script src="src/assets/scripts/theme.js"></script>
+<script>
+    var signin = new Vue(){
+        el: '#signinApp',
+        data: {
+            userName:"";
+            passWord:"";
+            isRemember:false
+        },
+        methods: {
+            login: function () {
+                this.$http.post('/someUrl', {foo: 'bar'}).then(response => {
+
+                    // get status
+                    response.status;
+
+                    // get status text
+                    response.statusText;
+
+                    // get 'Expires' header
+                    response.headers.get('Expires');
+
+                    // get body data
+                    this.someData = response.body;
+
+                }, response => {
+                });
+            }
+        }
+    }
+    Vue.http.headers.common['Authorization'] = 'bearer '+ localStorage.token;
+</script>
+</body>
+</html>
