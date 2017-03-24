@@ -23,6 +23,8 @@ const routes = [
 const router = new VueRouter({
         routes // （缩写）相当于 routes: routes
 })
+Vue.http.options.emulateJSON = true;
+Vue.http.headers.common['Authorization'] = 'bearer '+localStorage.token;
 new Vue({
         el: '#app',
         // render: h => h(mrjing)
@@ -30,7 +32,23 @@ new Vue({
                 'my-component': Main,
                 'my-component1': App
         },
-        router
+        router,
+        data: {
+                userName:"",
+                passWord:"",
+                isRemember:false
+        },
+        methods: {
+                login: function () {
+                        this.$http.post('http://localhost:8015/token', {grant_type: 'password',username:this.userName,password:this.passWord}).then(response => {
+                                localStorage.token = response.body.access_token;
+                                Vue.http.headers.common['Authorization'] = 'bearer '+ localStorage.token;
+                                alert(response.body.access_token);
+                        }, response => {
+                                alert("error")
+                        });
+                }
+        }
 }).$mount('#app')
 
 

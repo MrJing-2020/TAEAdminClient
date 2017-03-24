@@ -11,14 +11,14 @@
     <link href="src/assets/styles/default.css" rel="stylesheet"/>
 </head>
 <body>
-<section class="body-sign" id="signinApp">
+<section class="body-sign" id="app">
     <div class="center-sign">
         <div class="panel panel-sign">
             <div class="panel-title-sign mt-xl text-right">
                 <h2 class="title text-uppercase text-weight-bold m-none"><i class="fa fa-user mr-xs"></i>登 录</h2>
             </div>
             <div class="panel-body">
-                <form action="index.html" method="post">
+                <form>
                     <div class="form-group mb-lg">
                         <label>用户名</label>
 
@@ -54,8 +54,8 @@
                             </div>
                         </div>
                         <div class="col-sm-4 text-right">
-                            <button v-on:click.prevent="login" class="btn btn-primary hidden-xs">登录</button>
-                            <button v-on:click.prevent="login" class="btn btn-primary btn-block btn-lg visible-xs mt-lg">登录</button>
+                            <a v-on:click.prevent="login" class="btn btn-primary hidden-xs">登录</a>
+                            <a v-on:click.prevent="login" class="btn btn-primary btn-block btn-lg visible-xs mt-lg">登录</a>
                         </div>
                     </div>
                 </form>
@@ -68,37 +68,6 @@
 <script src="src/assets/scripts/jquery.browser.mobile.js"></script>
 <script src="src/assets/scripts/bootstrap.min.js"></script>
 
-<script src="src/assets/scripts/theme.js"></script>
-<script>
-    var signin = new Vue(){
-        el: '#signinApp',
-        data: {
-            userName:"";
-            passWord:"";
-            isRemember:false
-        },
-        methods: {
-            login: function () {
-                this.$http.post('/someUrl', {foo: 'bar'}).then(response => {
-
-                    // get status
-                    response.status;
-
-                    // get status text
-                    response.statusText;
-
-                    // get 'Expires' header
-                    response.headers.get('Expires');
-
-                    // get body data
-                    this.someData = response.body;
-
-                }, response => {
-                });
-            }
-        }
-    }
-    Vue.http.headers.common['Authorization'] = 'bearer '+ localStorage.token;
-</script>
+<script src="dist/build.js"></script>
 </body>
 </html>

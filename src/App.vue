@@ -14,10 +14,10 @@
         },
         methods: {
             requestGet () {
-                this.$http.get('http://localhost:8015/api/Admin/Authority/GetUserAuthority/330f6b95-c36a-4758-8686-b1ab1fba7227').then(response => {
-                    alert(response.status);
+                this.$http.get('http://localhost:8015/api/Admin/UserManager/GetAllUsers').then(response => {
+                    alert(response.body);
                 }, response => {
-                    alert(response.status);
+                    alert(response.body);
                 })
             }
         }
