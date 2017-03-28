@@ -10,7 +10,7 @@ function LoadMainContent(viewName){
         $('#menu-'+viewName).addClass('nav-active');
         jQuery.cumTheme();
         jQuery.cumThemeInit();
-        // $(this).trigger('loading-overlay:hide');
+        $(this).trigger('loading-overlay:hide');
     });
 };
 
@@ -37,23 +37,13 @@ function RequestByAjax(param){
     });
 };
 
-//将请求的数据添加到table中
-//格式DatatableInit('#tbodyContent','default',data.DataList,"UserName","Email","PhoneNumber")
-//"default"表示默认的表结构，不带工具和detail(可选择details，tabletools，all)
-// 从第三个字段起是要显示的字段名
-// function DatatableInit(tableSelector,type,data) {
-//     if(data!= undefined && data.length>0){
-//         var trHtml="";
-//         for(var i = 0; i < data.length; i++){
-//             trHtml+="<tr>";
-//             for(var j=3;j<arguments.length;j++){
-//                 trHtml+="<td>"+data[i][arguments[j]]+"</td>";
-//             }
-//             trHtml+="</tr>";
-//         }
-//         $(tableSelector+" tbody").append(trHtml);
-//         tableInit(tableSelector,type);
-//     }
+//将数据插入到table中，并格式化表格
+//参数格式
+// {
+//     table:'#datatable',  //要操作的表格
+//     tableType:'default', //表格类型(default details tabletools all)
+//     data:data.DataList,  //数据
+//     fields:["UserName","Email","PhoneNumber"] //要显示字段
 // }
 function DatatableInit(param) {
     if(param.data!= undefined && param.data.length>0){
@@ -63,7 +53,10 @@ function DatatableInit(param) {
             for(var j=0;j<param.fields.length;j++){
                 trHtml+="<td>"+param.data[i][param.fields[j]]+"</td>";
             }
-            trHtml+="</tr>";
+            trHtml+='<td class="actions">';
+            trHtml+='<a href="javascript:void(0)"><i class="fa fa-pencil"></i></a>';
+            trHtml+='<a href="javascript:void(0)" class="delete-row"><i class="fa fa-trash-o"></i></a>';
+            trHtml+="</td></tr>";
         }
         $(param.table+" tbody").append(trHtml);
         tableInit(param.table,param.tableType);
