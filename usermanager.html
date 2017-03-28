@@ -1,5 +1,6 @@
 <header class="page-header">
     <h2>Advanced Tables</h2>
+
     <div class="right-wrapper pull-right">
         <ol class="breadcrumbs">
             <li>
@@ -10,9 +11,11 @@
             <li><span>Tables</span></li>
             <li><span>Advanced</span></li>
         </ol>
+
         <a class="sidebar-right-toggle" data-open="sidebar-right"><i class="fa fa-chevron-left"></i></a>
     </div>
 </header>
+
 <!-- start: page -->
 <section class="panel">
     <header class="panel-heading">
@@ -20,10 +23,11 @@
             <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
             <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
         </div>
-        <h2 class="panel-title">Rows with Details</h2>
+
+        <h2 class="panel-title">用户管理</h2>
     </header>
     <div class="panel-body">
-        <table class="table table-bordered table-striped mb-none" id="datatable-details">
+        <table class="table table-bordered table-striped mb-none" id="datatable">
             <thead>
             <tr>
                 <th>用户名</th>
@@ -31,109 +35,77 @@
                 <th>电话</th>
             </tr>
             </thead>
-            <tbody id="tbodyContent"></tbody>
+            <tbody id="tbodyContent">
+            </tbody>
         </table>
     </div>
 </section>
-<!-- end: page -->
 
 <script type="text/javascript">
-
-    var geUsers = function (pageNumber,pageSize,orderName) {
-        $.ajax({
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader('Authorization', 'Bearer ' + $.cookie("token"));
-            },
-            url: apiServiceBaseUri + 'api/Admin/UserManager/GetAllUsers',
-            type: "GET",
-            data:{pageNumber:pageNumber, pageSize:pageSize, orderName:orderName},
-            dataType: 'json',
-            success: function (data) {
-                if(data.DataList!= undefined && data.DataList.length>0){
-                    var trHtml="";
-                    for(var i = 0; i < data.DataList.length; i++){
-                        trHtml += [
-                            '<tr>',
-                            '<td>'+data.DataList[i].UserName+'</td>',
-                            '<td>'+data.DataList[i].Email+'</td>',
-                            '<td>'+data.DataList[i].PhoneNumber+'</td>',
-                            '</tr>'
-                        ].join("");
-                    }
-                    $("#tbodyContent").append(trHtml);
-                    datatableInit();
-                }
-            }
-        });
-    };
-    var datatableInit = function() {
-        var $table = $('#datatable-details');
-
-        // format function for row details
-        var fnFormatDetails = function( datatable, tr ) {
-            var data = datatable.fnGetData( tr );
-
-            return [
-                '<table class="table mb-none">',
-                '<tr class="b-top-none">',
-                '<td><label class="mb-none">Rendering engine:</label></td>',
-                '<td>' + data[1]+ ' ' + data[4] + '</td>',
-                '</tr>',
-                '<tr>',
-                '<td><label class="mb-none">Link to source:</label></td>',
-                '<td>Could provide a link here</td>',
-                '</tr>',
-                '<tr>',
-                '<td><label class="mb-none">Extra info:</label></td>',
-                '<td>And any further details here (images etc)</td>',
-                '</tr>',
-                '</div>'
-            ].join('');
-        };
-
-        // insert the expand/collapse column
-        var th = document.createElement( 'th' );
-        var td = document.createElement( 'td' );
-        td.innerHTML = '<i data-toggle class="fa fa-plus-square-o text-primary h5 m-none" style="cursor: pointer;"></i>';
-        td.className = "text-center";
-
-        $table
-                .find( 'thead tr' ).each(function() {
-                    this.insertBefore( th, this.childNodes[0] );
-                });
-
-        $table
-                .find( 'tbody tr' ).each(function() {
-                    this.insertBefore(  td.cloneNode( true ), this.childNodes[0] );
-                });
-
-        // initialize
-        var datatable = $table.dataTable({
-            aoColumnDefs: [{
-                bSortable: false,
-                aTargets: [ 0 ]
-            }],
-            aaSorting: [
-                [1, 'asc']
-            ]
-        });
-
-        // add a listener
-        $table.on('click', 'i[data-toggle]', function() {
-            var $this = $(this),
-                    tr = $(this).closest( 'tr' ).get(0);
-
-            if ( datatable.fnIsOpen(tr) ) {
-                $this.removeClass( 'fa-minus-square-o' ).addClass( 'fa-plus-square-o' );
-                datatable.fnClose( tr );
-            } else {
-                $this.removeClass( 'fa-plus-square-o' ).addClass( 'fa-minus-square-o' );
-                datatable.fnOpen( tr, fnFormatDetails( datatable, tr), 'details' );
-            }
-        });
-    };
     $(function(){
-        geUsers(1,10,'');
+        var callBackFun=function(data){
+//            DatatableInit('#datatable','default',data.DataList,"UserName","Email","PhoneNumber")
+            DatatableInit({
+                table:'#datatable',
+                tableType:'default',
+                data:data.DataList,
+                fields:["UserName","Email","PhoneNumber"]
+            })
+            $("#mainContent").trigger('loading-overlay:hide');
+        };
+        RequestByAjax({
+                url:'api/Admin/UserManager/GetAllUsers',
+                httptype:'GET',
+                data:{pageNumber:1, pageSize:10, orderName:''},
+                callBack:callBackFun
+            });
     });
 </script>
-<!--<script src="assets/javascripts/tables/examples.datatables.row.with.details.js"></script>-->
+
+<!--<header class="page-header">-->
+    <!--<h2>Advanced Tables</h2>-->
+    <!--<div class="right-wrapper pull-right">-->
+        <!--<ol class="breadcrumbs">-->
+            <!--<li>-->
+                <!--<a href="index.html">-->
+                    <!--<i class="fa fa-home"></i>-->
+                <!--</a>-->
+            <!--</li>-->
+            <!--<li><span>Tables</span></li>-->
+            <!--<li><span>Advanced</span></li>-->
+        <!--</ol>-->
+        <!--<a class="sidebar-right-toggle" data-open="sidebar-right"><i class="fa fa-chevron-left"></i></a>-->
+    <!--</div>-->
+<!--</header>-->
+<!--&lt;!&ndash; start: page &ndash;&gt;-->
+<!--<section class="panel">-->
+    <!--<header class="panel-heading">-->
+        <!--<div class="panel-actions">-->
+            <!--<a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>-->
+            <!--<a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>-->
+        <!--</div>-->
+        <!--<h2 class="panel-title">Rows with Details</h2>-->
+    <!--</header>-->
+    <!--<div class="panel-body">-->
+        <!--<table class="table table-bordered table-striped mb-none" id="datatable-details">-->
+            <!--<thead>-->
+            <!--<tr>-->
+                <!--<th>用户名</th>-->
+                <!--<th>邮箱</th>-->
+                <!--<th>电话</th>-->
+            <!--</tr>-->
+            <!--</thead>-->
+            <!--<tbody id="tbodyContent"></tbody>-->
+        <!--</table>-->
+    <!--</div>-->
+<!--</section>-->
+<!--&lt;!&ndash; end: page &ndash;&gt;-->
+
+<!--<script type="text/javascript">-->
+    <!--$(function(){-->
+        <!--var callBackTest=function(data){-->
+            <!--DatatableInit('#tbodyContent','default',data.DataList,"UserName","Email","PhoneNumber")-->
+        <!--};-->
+        <!--RequestByAjax('api/Admin/UserManager/GetAllUsers',{pageNumber:1, pageSize:10, orderName:''},'GET',callBackTest);-->
+    <!--});-->
+<!--</script>-->
