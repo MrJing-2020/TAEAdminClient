@@ -1,7 +1,7 @@
 ;
 var apiServiceBaseUri = 'http://localhost:8015/';
 
-//jquery路由实现
+//jquery实现路由
 function LoadMainContent(viewName){
     $("#mainContent").load(viewName+'.html',function(){
         $(this).trigger('loading-overlay:show');
@@ -53,9 +53,11 @@ function DatatableInit(param) {
             for(var j=0;j<param.fields.length;j++){
                 trHtml+="<td>"+param.data[i][param.fields[j]]+"</td>";
             }
-            trHtml+='<td class="actions">';
-            trHtml+='<a href="javascript:void(0)"><i class="fa fa-pencil"></i></a>';
-            trHtml+='<a href="javascript:void(0)" class="delete-row"><i class="fa fa-trash-o"></i></a>';
+            trHtml+='<td class="actions table-td">';
+            // trHtml+='<a href="#modalEdit" class="modal-with-zoom-anim"><i class="fa fa-pencil"></i></a>';
+            // trHtml+='<a href="#modalDelete" class="modal-with-zoom-anim delete-row"><i class="fa fa-trash-o"></i></a>';
+            trHtml+='<button href="#modalEdit" class="modal-with-zoom-anim mb-xs mt-xs mr-xs btn btn-xs btn-primary"><i class="fa fa-edit"></i> </button>';
+            trHtml+='<button href="#modalDelete" class="modal-with-zoom-anim mb-xs mt-xs mr-xs btn btn-xs btn-danger"><i class="fa fa-remove"></i> </button>';
             trHtml+="</td></tr>";
         }
         $(param.table+" tbody").append(trHtml);
@@ -63,7 +65,7 @@ function DatatableInit(param) {
     }
 }
 $(function() {
-     if(window.location.hash.substring(1)!=undefined&&window.location.hash.substring(1)!=''){
+     if(window.location.hash.substring(1)!=''){
          LoadMainContent(window.location.hash.substring(1))
      }else{
          LoadMainContent('main')

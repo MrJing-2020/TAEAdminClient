@@ -78,11 +78,11 @@ Theme Version: 	1.4.1
 		e.preventDefault();
 		$.magnificPopup.close();
 
-		new PNotify({
-			title: 'Success!',
-			text: 'Modal Confirm Message.',
-			type: 'success'
-		});
+		// new PNotify({
+		// 	title: 'Success!',
+		// 	text: 'Modal Confirm Message.',
+		// 	type: 'success'
+		// });
 	});
 
 	/*
