@@ -1,18 +1,5 @@
 //table结构初始化
-function tableInit(tableSelector,type) {
-    //初始化模态框
-    $('.modal-with-zoom-anim').magnificPopup({
-        type: 'inline',
-        fixedContentPos: false,
-        fixedBgPos: true,
-        overflowY: 'auto',
-        closeBtnInside: true,
-        preloader: false,
-        midClick: true,
-        removalDelay: 300,
-        mainClass: 'my-mfp-zoom-in',
-        modal: true
-    });
+function TableInit(tableSelector,type) {
     $(document).on('click', '.modal-dismiss', function (e) {
         e.preventDefault();
         $.magnificPopup.close();

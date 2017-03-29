@@ -11120,7 +11120,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sEmptyTable": "No data available in table",
+			"sEmptyTable": "没有任何数据",
 	
 	
 			/**
@@ -11152,7 +11152,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",
+			"sInfo": "显示 _START_ 到 _END_ 共计 _TOTAL_ 条",
 	
 	
 			/**
