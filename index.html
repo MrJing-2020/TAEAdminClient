@@ -26,9 +26,9 @@
 </head>
 
 <body>
-<div class="loading-overlay dark">
-    <div class="loader white"></div>
-</div>
+<span class="loading-overlay dark">
+    <span class="loader white"></span>
+</span>
 <section class="body">
     <!-- start: header -->
     <header class="header">
@@ -337,8 +337,13 @@
             </div>
         </aside>
         <!-- end: sidebar -->
-        <section role="main" class="content-body" id="mainContent" data-loading-overlay>
+        <section role="main" class="content-body" data-loading-overlay>
+            <div class="loading-overlay light" style="background-color: inherit">
+                <div class="loader black" style="opacity: 1 ;z-index: 9999"></div>
+            </div>
+            <div id="mainContent">
 
+            </div>
         </section>
     </div>
 </section>

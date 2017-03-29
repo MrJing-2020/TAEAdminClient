@@ -3,9 +3,8 @@ var apiServiceBaseUri = 'http://localhost:8015/';
 
 //jquery实现路由
 function LoadMainContent(viewName) {
+    $('.content-body').trigger('loading-overlay:show');
     $("#mainContent").load(viewName + '.html', function () {
-        $(this).trigger('loading-overlay:show');
-        $('#loadingSpan').trigger('loading-overlay:show');
         $('.nav.nav-main').find('li:not(".nav-parent.nav-expanded.nav-active")').removeClass('nav-active');
         $('#menu-' + viewName).addClass('nav-active');
         jQuery.cumTheme();
@@ -22,6 +21,7 @@ function LoadMainContent(viewName) {
 //     callBack:callBackFun
 // }
 function RequestByAjax(param) {
+    $('.content-body').trigger('loading-overlay:show');
     $.ajax({
         beforeSend: function (xhr) {
             xhr.setRequestHeader('Authorization', 'Bearer ' + $.cookie("token"));
@@ -31,19 +31,25 @@ function RequestByAjax(param) {
         data: param.data,
         dataType: 'json',
         success: function (response) {
-            if(param.callBack!=undefined&&param.callBack!=undefined){
+            if (param.callBack != undefined && param.callBack != undefined) {
                 param.callBack(response);
             }
+            $(this).trigger('loading-overlay:hide');
+
         },
         error: function (response) {
             new PNotify({
-                title: 'With Shadow',
-                text: response.error_description,
+                title: '错误',
+                text: response.error_description==undefined?"服务器错误":response.error_description,
                 type: 'error',
-                index: 100000,
                 shadow: true,
-                stack: { "push": "top", "context": $("body"), "modal": false}
+                stack: {
+                    "push": "top",
+                    "context": ($('.mfp-container').length && $('.mfp-container').length > 0) ? $('.mfp-container') : $("body"),
+                    "modal": false
+                }
             });
+            $('.content-body').trigger('loading-overlay:hide');
         }
     });
 };
@@ -107,13 +113,13 @@ function InitKey(ele) {
     $('#Id').val($(ele).attr('trkey'));
 };
 //提交数据
-function ModalDataSubmit(e,url,data) {
+function ModalDataSubmit(e, url, data) {
     e.preventDefault();
     RequestByAjax({
-        url:url,
-        httptype:'POST',
-        data:data,
-        callBack:function () {
+        url: url,
+        httptype: 'POST',
+        data: data,
+        callBack: function () {
             $.magnificPopup.close();
         }
     });

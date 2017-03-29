@@ -22,13 +22,6 @@
         <h2 class="panel-title">用户管理</h2>
     </header>
     <div class="panel-body">
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="mb-md">
-                    <button id="addNewItem" href="#modalEdit" class="modal-with-zoom-anim other btn btn-primary">Add <i class="fa fa-plus"></i></button>
-                </div>
-            </div>
-        </div>
         <table class="table table-bordered table-striped mb-none" id="datatable">
             <thead>
             <tr>
@@ -40,7 +33,15 @@
             </thead>
             <tbody id="tbodyContent">
             </tbody>
-
+            <tfoot>
+            <tr>
+                <td colspan="4">
+                    <button id="addNewItem" href="#modalEdit" class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-primary">
+                        Add<i class="fa fa-plus"></i>
+                    </button>
+                </td>
+            </tr>
+            </tfoot>
         </table>
         <!-- 弹出框 -->
         <div id="modalEdit" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
@@ -54,25 +55,29 @@
                         <div class="form-group mt-lg">
                             <label class="col-sm-2 control-label">用户名</label>
                             <div class="col-sm-9">
-                                <input type="text" id="UserName" name="UserName" class="form-control" placeholder="" required/>
+                                <input type="text" id="UserName" name="UserName" class="form-control" placeholder=""
+                                       required/>
                             </div>
                         </div>
                         <div class="form-group mt-lg">
                             <label class="col-sm-2 control-label">密码</label>
                             <div class="col-sm-9">
-                                <input type="password" id="Password" name="Password" class="form-control" placeholder="" required/>
+                                <input type="password" id="Password" name="Password" class="form-control" placeholder=""
+                                       required/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">邮箱</label>
                             <div class="col-sm-9">
-                                <input type="text" id="Email" name="Email" class="form-control" placeholder="" required/>
+                                <input type="text" id="Email" name="Email" class="form-control" placeholder=""
+                                       required/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">电话</label>
                             <div class="col-sm-9">
-                                <input type="text" id="PhoneNumber" name="PhoneNumber" class="form-control" placeholder="" />
+                                <input type="text" id="PhoneNumber" name="PhoneNumber" class="form-control"
+                                       placeholder=""/>
                             </div>
                         </div>
                     </form>
@@ -80,7 +85,7 @@
                 <footer class="panel-footer">
                     <div class="row">
                         <div class="col-md-12 text-right">
-                            <button class="btn btn-primary modal-confirm edit" >提交</button>
+                            <button class="btn btn-primary modal-confirm edit">提交</button>
                             <button class="btn btn-default modal-dismiss">取消</button>
                         </div>
                     </div>
@@ -117,10 +122,10 @@
         //打开弹窗前执行
         var beforeOpen = function () {
             RequestByAjax({
-                url:'api/Admin/UserManager/GetUserDetail',
-                httptype:'GET',
-                data:{id:$('#Id').val()},
-                callBack:function (response) {
+                url: 'api/Admin/UserManager/GetUserDetail',
+                httptype: 'GET',
+                data: {id: $('#Id').val()},
+                callBack: function (response) {
                     $('#UserName').val(response.UserName);
                     $('#Email').val(response.Email);
                     $('#PhoneNumber').val(response.PhoneNumber);
@@ -128,36 +133,32 @@
                 }
             });
         };
-        $('#addNewItem').on('click',function () {
+        $('#addNewItem').on('click', function () {
             $('#editModalForm').find('input').val("");
         });
-        $('.modal-confirm.edit').on('click',function (e) {
-            $(this).trigger('loading-overlay:show');
-            ModalDataSubmit(e,"api/Admin/UserManager/SubUserData",$('#editModalForm').serialize());
-            $(this).trigger('loading-overlay:hide');
+        $('.modal-confirm.edit').on('click', function (e) {
+            ModalDataSubmit(e, "api/Admin/UserManager/SubUserData", $('#editModalForm').serialize());
         });
-        $('.modal-confirm.del').on('click',function (e) {
-            $(this).trigger('loading-overlay:show');
-            ModalDataSubmit(e,"",$('#Id').val());
-            $(this).trigger('loading-overlay:hide');
+        $('.modal-confirm.del').on('click', function (e) {
+//            ModalDataSubmit(e,"",$('#Id').val());
         });
-        var callBack=function(data){
+        var callBack = function (data) {
             DatatableInit({
-                table:'#datatable',
-                tableType:'default',
-                data:data.DataList,
-                key:'Id',
-                fields:["UserName","Email","PhoneNumber"]
+                table: '#datatable',
+                tableType: 'default',
+                data: data.DataList,
+                key: 'Id',
+                fields: ["UserName", "Email", "PhoneNumber"]
             })
             $("#mainContent").trigger('loading-overlay:hide');
             ModalInit(beforeOpen);
         };
         RequestByAjax({
-            url:'api/Admin/UserManager/GetAllUsers',
-            httptype:'GET',
-            data:{pageNumber:1, pageSize:10, orderName:''},
-            callBack:callBack
+            url: 'api/Admin/UserManager/GetAllUsers',
+            httptype: 'GET',
+            data: {pageNumber: 1, pageSize: 10, orderName: ''},
+            callBack: callBack
         });
         $(this).trigger('loading-overlay:hide');
-    }).apply(this,[jQuery])
+    }).apply(this, [jQuery])
 </script>
