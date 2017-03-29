@@ -1,7 +1,7 @@
 ;
 var apiServiceBaseUri = 'http://localhost:8015/';
 
-//jqueryÊµÏÖÂ·ÓÉ
+//ç”¨jqueryå®ç°ç®€å•è·¯ç”±
 function LoadMainContent(viewName) {
     $('.content-body').trigger('loading-overlay:show');
     $("#mainContent").load(viewName + '.html', function () {
@@ -12,8 +12,8 @@ function LoadMainContent(viewName) {
     });
 };
 
-//ajaxÇëÇó£¬ÔÚheaderÖĞÌí¼ÓÁËÈÏÖ¤ĞÅÏ¢
-//param²ÎÊı¸ñÊ½£º
+//ajaxè¯·æ±‚ å‘headerä¸­æ·»åŠ éªŒè¯ä¿¡æ¯
+//paramå‚æ•°æ ¼å¼
 // {
 //     url:'api/Admin/UserManager/GetAllUsers',
 //     httptype:'GET',
@@ -39,8 +39,8 @@ function RequestByAjax(param) {
         },
         error: function (response) {
             new PNotify({
-                title: '´íÎó',
-                text: response.error_description==undefined?"·şÎñÆ÷´íÎó":response.error_description,
+                title: 'å‘ç”Ÿé”™è¯¯ï¼',
+                text: response.error_description==undefined?"æœåŠ¡å™¨é”™è¯¯":response.error_description,
                 type: 'error',
                 shadow: true,
                 stack: {
@@ -54,13 +54,14 @@ function RequestByAjax(param) {
     });
 };
 
-//½«Êı¾İ²åÈëµ½tableÖĞ£¬²¢¸ñÊ½»¯±í¸ñ
-//²ÎÊı¸ñÊ½
+//å°†è¯·æ±‚åˆ°çš„æ•°æ®å¡«å……åˆ°tableä¸­ï¼Œå¹¶é…ç½®è¡¨ç»“æ„å’Œå·¥å…·
+//å‚æ•°æ ¼å¼
 // {
-//     table:'#datatable',  //Òª²Ù×÷µÄ±í¸ñ
-//     tableType:'default', //±í¸ñÀàĞÍ(default details tabletools all)
-//     data:data.DataList,  //Êı¾İ
-//     fields:["UserName","Email","PhoneNumber"] //ÒªÏÔÊ¾×Ö¶Î
+//     table:'#datatable',  //å¾…å¡«å……çš„è¡¨
+//     tableType:'default', //è¡¨ç»“æ„ç±»å‹(å¯é€‰default details tabletools allå››ç§)
+//     data:data.DataList,  //æ•°æ®
+//     key:'Id',            //keyå­—æ®µï¼Œè¡Œçš„å”¯ä¸€æ€§
+//     fields:["UserName","Email","PhoneNumber"] //éœ€è¦æ˜¾ç¤ºçš„å­—æ®µ
 // }
 function DatatableInit(param) {
     if (param.data != undefined && param.data.length > 0) {
@@ -79,7 +80,7 @@ function DatatableInit(param) {
         TableInit(param.table, param.tableType);
     }
 }
-//³õÊ¼»¯Ä£Ì¬¿ò
+//åˆå§‹åŒ–æ¨¡æ€æ¡†
 function ModalInit(beforeOpen) {
     $('.modal-with-zoom-anim.edit').magnificPopup({
         type: 'inline',
@@ -112,7 +113,7 @@ function ModalInit(beforeOpen) {
 function InitKey(ele) {
     $('#Id').val($(ele).attr('trkey'));
 };
-//Ìá½»Êı¾İ
+//æäº¤modalæ•°æ®
 function ModalDataSubmit(e, url, data) {
     e.preventDefault();
     RequestByAjax({
