@@ -5,3 +5,10 @@
 .breadcrumbs.right-tagger{
     margin-right: 25px;
 }
+.tfoot-td{
+    padding: 0px 5px !important;
+}
+.actions.table-td{
+    padding:0px !important;
+    padding-left: 5px !important;
+}
