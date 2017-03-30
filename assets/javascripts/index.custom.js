@@ -30,8 +30,9 @@ function RequestByAjax(param) {
         url: apiServiceBaseUri + param.url,
         type: param.type,
         cache : false,
-        data: param.data,
+        data: JSON.stringify(param.data),
         dataType: 'json',
+        contentType: "application/json;charset=utf-8",
         success: function (response) {
             if (param.success != undefined) {
                 param.success(response);

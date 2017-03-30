@@ -120,10 +120,14 @@
 </section>
 <script type="text/javascript">
     (function ($) {
+        var listUrl='api/Admin/UserManager/AllUsers';
+        var detailUrl='api/Admin/UserManager/GetUserDetail';
+        var subDataUrl='api/Admin/UserManager/SubUserData';
+        var delUrl="";
         //打开弹窗前执行
         var beforeOpen = function () {
             RequestByAjax({
-                url: 'api/Admin/UserManager/GetUserDetail',
+                url: detailUrl,
                 type: 'GET',
                 data: {id: $('#Id').val()},
                 success: function (response) {
@@ -140,18 +144,18 @@
             $('#editModalForm').find('input').val("");
         });
         $('.modal-confirm.edit').on('click', function (e) {
-            ModalDataSubmit(e, "api/Admin/UserManager/SubUserData", $('#editModalForm').serialize());
+            ModalDataSubmit(e, subDataUrl, $('#editModalForm').serialize());
         });
         $('.modal-confirm.del').on('click', function (e) {
-//            ModalDataSubmit(e,"",$('#Id').val());
+            ModalDataSubmit(e,delUrl,$('#Id').val());
         });
         function userManagerTableInit() {
             TableInit({
                 table: '#datatable',
                 tableType: 'default',
                 ajax: {
-                    url: 'api/Admin/UserManager/GetAllUsers',
-                    type: 'GET',
+                    url: listUrl,
+                    type: 'POST',
                 },
                 search: '',
                 columns: [

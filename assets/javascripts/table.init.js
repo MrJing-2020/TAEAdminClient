@@ -11,11 +11,11 @@ function TableInit(param) {
                     url:param.ajax.url,
                     type:param.ajax.type,
                     data:{
-                        pageNumber:(data.start/data.length)+1,
-                        pageSize:data.length,
-                        orderName:orderName,
-                        orderType:data.order[0].dir,
-                        search:param.search
+                        "pageNumber":(data.start/data.length)+1,
+                        "pageSize":data.length,
+                        "orderName":orderName,
+                        "orderType":data.order[0].dir,
+                        "search":{}
                     },
                     success:function (response) {
                         var returnData = {
