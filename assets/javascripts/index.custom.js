@@ -30,7 +30,7 @@ function RequestByAjax(param) {
         url: apiServiceBaseUri + param.url,
         type: param.type,
         cache : false,
-        data: JSON.stringify(param.data),
+        data: param.data,
         dataType: 'json',
         contentType: "application/json;charset=utf-8",
         success: function (response) {
@@ -60,32 +60,6 @@ function RequestByAjax(param) {
     });
 };
 
-//将请求到的数据填充到table中，并配置表结构和工具
-//参数格式
-// {
-//     table:'#datatable',  //待填充的表
-//     tableType:'default', //表结构类型(可选default details tabletools all四种)
-//     data:data.DataList,  //数据
-//     key:'Id',            //key字段，行的唯一性
-//     fields:["UserName","Email","PhoneNumber"] //需要显示的字段
-// }
-// function DatatableInit(param) {
-//     if (param.data != undefined && param.data.length > 0) {
-//         var trHtml = "";
-//         for (var i = 0; i < param.data.length; i++) {
-//             trHtml += "<tr>";
-//             for (var j = 0; j < param.fields.length; j++) {
-//                 trHtml += "<td>" + param.data[i][param.fields[j]] + "</td>";
-//             }
-//             trHtml += '<td class="actions table-td">';
-//             trHtml += '<button href="#modalEdit" onclick="InitKey(this)" trkey="' + param.data[i][param.key] + '" class="modal-with-zoom-anim edit mb-xs mt-xs mr-xs btn btn-xs btn-primary"><i class="fa fa-edit"></i> </button>';
-//             trHtml += '<button href="#modalDelete" onclick="InitKey(this)" trkey="' + param.data[i][param.key] + '" class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-danger"><i class="fa fa-remove"></i> </button>';
-//             trHtml += "</td></tr>";
-//         }
-//         $(param.table + " tbody").append(trHtml);
-//         TableInit(param.table, param.tableType);
-//     }
-// }
 //初始化模态框
 function ModalInit(beforeOpen) {
     $('.modal-with-zoom-anim.edit').magnificPopup({
@@ -100,9 +74,26 @@ function ModalInit(beforeOpen) {
         mainClass: 'my-mfp-zoom-in',
         modal: true,
         callbacks: {
-            beforeOpen: beforeOpen
+            beforeOpen: beforeOpen.edit
         }
     });
+    if(beforeOpen.allocation!=undefined){
+        $('.modal-with-zoom-anim.allocation').magnificPopup({
+            type: 'inline',
+            fixedContentPos: false,
+            fixedBgPos: true,
+            overflowY: 'auto',
+            closeBtnInside: true,
+            preloader: false,
+            midClick: true,
+            removalDelay: 300,
+            mainClass: 'my-mfp-zoom-in',
+            modal: true,
+            callbacks: {
+                beforeOpen: beforeOpen.allocation
+            }
+        });
+    };
     $('.modal-with-zoom-anim.other').magnificPopup({
         type: 'inline',
         fixedContentPos: false,
@@ -131,7 +122,6 @@ function ModalDataSubmit(e, url, data) {
             LoadMainContent(window.location.hash.substring(1))
         }
     });
-
 }
 
 $(function () {

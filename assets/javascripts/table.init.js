@@ -5,18 +5,21 @@ function TableInit(param) {
             serverSide: true,   //启用服务器端分页
             searching: false,    //禁用原生搜索
             processing: false,
+            columns: param.columns,
+            sDom: CONSTANT.DATA_TABLES.DEFAULT_OPTION.sDom,
+            oLanguage: CONSTANT.DATA_TABLES.DEFAULT_OPTION.oLanguage,
             ajax : function(data, callback, settings) {
                 var orderName=data.columns[(data.order[0].column)].data;
                 RequestByAjax({
                     url:param.ajax.url,
                     type:param.ajax.type,
-                    data:{
+                    data:JSON.stringify({
                         "pageNumber":(data.start/data.length)+1,
                         "pageSize":data.length,
                         "orderName":orderName,
                         "orderType":data.order[0].dir,
                         "search":{}
-                    },
+                    }),
                     success:function (response) {
                         var returnData = {
                             draw : data.draw,
@@ -35,7 +38,6 @@ function TableInit(param) {
                     error:param.ajax.error
                 })
             },
-            "columns":param.columns,
             fnInitComplete: function(settings, json) {
                 // select 2
                 if ($.isFunction($.fn['select2'])) {
@@ -57,32 +59,6 @@ function TableInit(param) {
 
                 if ($.isFunction($.fn.placeholder)) {
                     $search.placeholder();
-                }
-            },
-            sDom: "<'row datatables-header form-inline'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>r><'table-responsive't><'row datatables-footer'<'col-sm-12 col-md-6'i><'col-sm-12 col-md-6'p>>",
-            oLanguage: {
-                sLengthMenu: '_MENU_ 显示条数',
-                sProcessing: '<i class="fa fa-spinner fa-spin"></i> Loading',
-                "sZeroRecords":  "没有匹配结果",
-                "sInfo":         "当前显示第 _START_ 至 _END_ 项，共 _TOTAL_ 项。",
-                "sInfoEmpty":    "当前显示第 0 至 0 项，共 0 项",
-                "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
-                "sInfoPostFix":  "",
-                // "sSearch":       "搜索:",
-                "sUrl":          "",
-                "sEmptyTable":     "表中数据为空",
-                "sLoadingRecords": "载入中...",
-                "sInfoThousands":  ",",
-                "oPaginate": {
-                    "sFirst":    "首页",
-                    "sPrevious": "上页",
-                    "sNext":     "下页",
-                    "sLast":     "末页",
-                    "sJump":     "跳转"
-                },
-                "oAria": {
-                    "sSortAscending":  ": 以升序排列此列",
-                    "sSortDescending": ": 以降序排列此列"
                 }
             },
         });

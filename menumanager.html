@@ -1,81 +1,212 @@
 <header class="page-header">
-    <h2>Advanced Tables</h2>
+    <h2>菜单管理</h2>
+
     <div class="right-wrapper pull-right">
-        <ol class="breadcrumbs">
+        <ol class="breadcrumbs right-tagger">
             <li>
                 <a href="index.html">
                     <i class="fa fa-home"></i>
                 </a>
             </li>
-            <li><span>Tables</span></li>
-            <li><span>Advanced</span></li>
+            <li><span>菜单管理</span></li>
         </ol>
-        <a class="sidebar-right-toggle" data-open="sidebar-right"><i class="fa fa-chevron-left"></i></a>
     </div>
 </header>
-<!-- start: page -->
-<div class="row">
-    <div class="col-md-12">
-        <section class="panel">
-            <header class="panel-heading">
-                <div class="panel-actions">
-                    <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
-                    <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
-                </div>
+<section class="panel">
+    <header class="panel-heading">
+        <div class="panel-actions">
+            <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
+            <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+        </div>
 
-                <h2 class="panel-title">Actions</h2>
-            </header>
-            <div class="panel-body">
-                <div class="table-responsive">
-                    <table class="table mb-none">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Username</th>
-                            <th>Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td class="actions">
-                                <a href=""><i class="fa fa-pencil"></i></a>
-                                <a href="" class="delete-row"><i class="fa fa-trash-o"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                            <td class="actions">
-                                <a href=""><i class="fa fa-pencil"></i></a>
-                                <a href="" class="delete-row"><i class="fa fa-trash-o"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td>@twitter</td>
-                            <td class="actions">
-                                <a href=""><i class="fa fa-pencil"></i></a>
-                                <a href="" class="delete-row"><i class="fa fa-trash-o"></i></a>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+        <h2 class="panel-title">菜单管理</h2>
+    </header>
+    <div class="panel-body">
+        <table class="table table-bordered table-striped mb-none" id="datatable">
+            <thead>
+            <tr>
+                <th>菜单名</th>
+                <th>地址</th>
+                <th>父级菜单</th>
+                <th>图标</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="tbodyContent">
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="5" class="tfoot-td">
+                    <button id="addNewItem" href="#modalEdit"
+                            class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-primary">
+                        Add<i class="fa fa-plus"></i>
+                    </button>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+        <!-- 弹出框 -->
+        <div id="modalEdit" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
+            <section class="panel">
+                <header class="panel-heading">
+                    <h2 class="panel-title">编辑菜单</h2>
+                </header>
+                <div class="panel-body">
+                    <form class="form-horizontal" id="editModalForm" novalidate="novalidate">
+                        <input type="hidden" id="Id" name="Id"/>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">菜单名</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="MenuName" name="MenuName" class="form-control" placeholder=""
+                                       required/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">地址</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="MenuUrl" name="MenuUrl" class="form-control" placeholder=""
+                                       required/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">菜单级别</label>
+                            <div class="col-sm-9">
+                                <select class="form-control mb-md" id="MenuLever" name="MenuLever">
+                                    <option>选择菜单级别</option>
+                                    <option value="1">父级菜单</option>
+                                    <option value="2">子菜单</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">父级菜单</label>
+                            <div class="col-sm-9">
+                                <select class="form-control mb-md" id="MenuPareId" name="MenuPareId">
+                                    <option value="0">选择父级菜单</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">排序</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="Sort" name="Sort" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">图标</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="MenuIco" name="MenuIco" class="form-control" />
+                            </div>
+                        </div>
+                    </form>
                 </div>
-            </div>
-        </section>
+                <footer class="panel-footer">
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <button class="btn btn-primary modal-confirm edit">提交</button>
+                            <button class="btn btn-default modal-dismiss">取消</button>
+                        </div>
+                    </div>
+                </footer>
+            </section>
+        </div>
+        <div id="modalDelete" class="zoom-anim-dialog modal-block modal-block-sm modal-block-danger mfp-hide">
+            <section class="panel">
+                <div class="panel-body">
+                    <div class="modal-wrapper">
+                        <div class="modal-icon">
+                            <i class="fa fa-times-circle"></i>
+                        </div>
+                        <div class="modal-text">
+                            <h4>提醒</h4>
+                            <p>删除后将不能恢复,您确认吗？</p>
+                        </div>
+                    </div>
+                </div>
+                <footer class="panel-footer">
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <button class="btn btn-danger modal-confirm del">确认</button>
+                            <button class="btn btn-primary modal-dismiss">取消</button>
+                        </div>
+                    </div>
+                </footer>
+            </section>
+        </div>
     </div>
-</div>
-<!-- end: page -->
+</section>
 <script type="text/javascript">
-
+    (function ($) {
+        var listUrl='api/Admin/MenuManager/AllMenus';
+        var detailUrl='api/Admin/MenuManager/GetMenuDetail';
+        var subDataUrl='api/Admin/MenuManager/SubUserData';
+        var delUrl="";
+        //打开弹窗前执行
+        var beforeOpen = function () {
+            RequestByAjax({
+                url: detailUrl,
+                type: 'GET',
+                data: {id: $('#Id').val()},
+                success: function (response) {
+                    $('#MenuName').val(response.MenuName);
+                    $('#MenuUrl').val(response.MenuUrl);
+                    $('#MenuLever').val(response.MenuLever);
+                    $('#MenuPareId').val(response.MenuPareId);
+                    $('#Sort').val(response.Sort);
+                    $('#MenuIco').val(response.Name);
+                },
+                error: function () {
+                }
+            });
+        };
+        $('#addNewItem').on('click', function () {
+            $('#editModalForm').find('input').val("");
+        });
+        $('.modal-confirm.edit').on('click', function (e) {
+            ModalDataSubmit(e, subDataUrl,JSON.stringify($("#editModalForm").serializeNestedObject()));
+        });
+        $('.modal-confirm.del').on('click', function (e) {
+            ModalDataSubmit(e,delUrl,$('#Id').val());
+        });
+        function userManagerTableInit() {
+            TableInit({
+                table: '#datatable',
+                tableType: 'default',
+                ajax: {
+                    url: listUrl,
+                    type: 'POST',
+                },
+                search: '',
+                columns: [
+                    {
+                        data: "MenuName"
+                    },
+                    {
+                        data: "MenuUrl"
+                    },
+                    {
+                        data: "PareMenuName"
+                    },
+                    {
+                        data: "MenuIco",
+                        render : function(data,type, row, meta) {
+                            return '<i class="'+data+'"></i>';
+                        }
+                    },
+                    {
+                        className:'actions table-td',
+                        data:"Id",
+                        render : function(data,type, row, meta) {
+                            var trHtml='';
+                            trHtml += '<button href="#modalEdit" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim edit mb-xs mt-xs mr-xs btn btn-xs btn-primary"><i class="fa fa-edit"></i> </button>';
+                            trHtml += '<button href="#modalDelete" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-danger"><i class="fa fa-remove"></i> </button>';
+                            return trHtml;
+                        }
+                    }
+                ],
+                success:beforeOpen
+            });
+        };
+        userManagerTableInit();
+    }).apply(this, [jQuery])
 </script>

@@ -116,6 +116,45 @@
                 </footer>
             </section>
         </div>
+        <div id="modalAllocation" class="zoom-anim-dialog modal-block modal-block-info mfp-hide"  >
+            <section class="panel">
+                <header class="panel-heading">
+                    <h2 class="panel-title">分配角色</h2>
+                </header>
+                <div class="panel-body" >
+                    <form class="form-horizontal form-bordered" id="allocationModalForm" novalidate="novalidate">
+                        <div class="col-sm-6" style="padding-left: 0px;">
+                            <div class="well info allocationTital">
+                                目前角色
+                            </div>
+                        </div>
+                        <div class="col-sm-6" style="padding-left: 0px;">
+                            <div class="well info allocationTital">
+                                其他角色
+                            </div>
+                        </div>
+                            <div class="col-sm-6 scrollable visible-slider colored-slider has-scrollbar"  style="height: 200px; width: 50%" data-plugin-scrollable>
+                                <div class="scrollable-content" id="userIn" tabindex="0" style="right: -17px; ">
+                                </div>
+                                <div class="scrollable-pane" style="opacity: 1;"><div class="scrollable-slider" style="height: 72px; transform: translate(0px, 0px);"></div></div>
+                            </div>
+                            <div class="col-sm-6 scrollable visible-slider colored-slider has-scrollbar"  style="height: 200px;width: 50%" data-plugin-scrollable>
+                                <div class="scrollable-content" id="userNotIn" tabindex="0" style="right: -17px;">
+                                </div>
+                                <div class="scrollable-pane" style="opacity: 1;"><div class="scrollable-slider" style="height: 72px; transform: translate(0px, 201px);"></div></div>
+                            </div>
+                    </form>
+                </div>
+                <footer class="panel-footer">
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <button class="btn btn-info modal-confirm edit">提交</button>
+                            <button class="btn btn-default modal-dismiss">取消</button>
+                        </div>
+                    </div>
+                </footer>
+            </section>
+        </div>
     </div>
 </section>
 <script type="text/javascript">
@@ -123,28 +162,66 @@
         var listUrl='api/Admin/UserManager/AllUsers';
         var detailUrl='api/Admin/UserManager/GetUserDetail';
         var subDataUrl='api/Admin/UserManager/SubUserData';
+        var getRoleUrl='api/Admin/UserManager/GetRoleByUser';
         var delUrl="";
         //打开弹窗前执行
-        var beforeOpen = function () {
-            RequestByAjax({
-                url: detailUrl,
-                type: 'GET',
-                data: {id: $('#Id').val()},
-                success: function (response) {
-                    $('#UserName').val(response.UserName);
-                    $('#Email').val(response.Email);
-                    $('#PhoneNumber').val(response.PhoneNumber);
-                    $('#Password').val('');
-                },
-                error: function () {
-                }
-            });
-        };
+        var beforeOpen={
+            edti:function () {
+                RequestByAjax({
+                    url: detailUrl,
+                    type: 'GET',
+                    data: {id: $('#Id').val()},
+                    success: function (response) {
+                        $('#UserName').val(response.UserName);
+                        $('#Email').val(response.Email);
+                        $('#PhoneNumber').val(response.PhoneNumber);
+                        $('#Password').val('');
+                    },
+                    error: function () {
+                    }
+                });
+            },
+            allocation:function () {
+                RequestByAjax({
+                    url: getRoleUrl,
+                    type: 'GET',
+                    data: {id: $('#Id').val()},
+                    success: function (response) {
+                        $('#userIn').empty();
+                        $("#userNotIn").empty();
+                        var htmlIn="";
+                        for(var i=0;i<response.UserIn.length;i++){
+                            htmlIn+=[
+                                '<div class="checkbox-custom checkbox-primary">',
+                                '<input type="checkbox" checked="" id='+ response.UserIn[i].Id +' value='+ response.UserIn[i].Id +'>',
+                                '<label for='+response.UserIn[i].Id+'>'+response.UserIn[i].Name+'</label>',
+                                '</div>'
+                            ].join('')
+                        };
+
+                        $('#userIn').append(htmlIn);
+                        var htmlNotIn="";
+                        for(var i=0;i<response.UserNotIn.length;i++){
+                            htmlNotIn+=[
+                                '<div class="checkbox-custom checkbox-default">',
+                                '<input type="checkbox" id='+ response.UserNotIn[i].Id +' value='+ response.UserNotIn[i].Id +'>',
+                                '<label for='+response.UserNotIn[i].Id+'>'+response.UserNotIn[i].Name+'</label>',
+                                '</div>'
+                            ].join('')
+                        };
+
+                        $("#userNotIn").append(htmlNotIn);
+                    },
+                    error: function () {
+                    }
+                });
+            }
+        }
         $('#addNewItem').on('click', function () {
             $('#editModalForm').find('input').val("");
         });
         $('.modal-confirm.edit').on('click', function (e) {
-            ModalDataSubmit(e, subDataUrl, $('#editModalForm').serialize());
+            ModalDataSubmit(e, subDataUrl, JSON.stringify($("#editModalForm").serializeNestedObject()));
         });
         $('.modal-confirm.del').on('click', function (e) {
             ModalDataSubmit(e,delUrl,$('#Id').val());
@@ -175,6 +252,7 @@
                             var trHtml='';
                             trHtml += '<button href="#modalEdit" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim edit mb-xs mt-xs mr-xs btn btn-xs btn-primary"><i class="fa fa-edit"></i> </button>';
                             trHtml += '<button href="#modalDelete" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-danger"><i class="fa fa-remove"></i> </button>';
+                            trHtml += '<button href="#modalAllocation" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim allocation mb-xs mt-xs mr-xs btn btn-xs btn-info"><i class="fa fa-user"></i> </button>';
                             return trHtml;
                         }
                     }

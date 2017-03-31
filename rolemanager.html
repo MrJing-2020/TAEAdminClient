@@ -118,7 +118,7 @@
             $('#editModalForm').find('input').val("");
         });
         $('.modal-confirm.edit').on('click', function (e) {
-            ModalDataSubmit(e, subDataUrl, $('#editModalForm').serialize());
+            ModalDataSubmit(e, subDataUrl,JSON.stringify($("#editModalForm").serializeNestedObject()));
         });
         $('.modal-confirm.del').on('click', function (e) {
             ModalDataSubmit(e,delUrl,$('#Id').val());
