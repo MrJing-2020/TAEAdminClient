@@ -182,13 +182,13 @@
                 });
             },
             allocation:function () {
+                $('#userIn').empty();
+                $("#userNotIn").empty();
                 RequestByAjax({
                     url: getRoleUrl,
                     type: 'GET',
                     data: {id: $('#Id').val()},
                     success: function (response) {
-                        $('#userIn').empty();
-                        $("#userNotIn").empty();
                         var htmlIn="";
                         for(var i=0;i<response.UserIn.length;i++){
                             htmlIn+=[
