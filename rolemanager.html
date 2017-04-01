@@ -22,7 +22,7 @@
         <h2 class="panel-title">角色管理</h2>
     </header>
     <div class="panel-body">
-        <table class="table table-bordered table-striped mb-none" id="datatable">
+        <table class="table table-data table-bordered table-striped table-condensed table-hover mb-none" id="datatable">
             <thead>
             <tr>
                 <th>角色名</th>
@@ -102,17 +102,19 @@
         var subDataUrl='api/Admin/RoleManager/SubRoleData';
         var delUrl="";
         //打开弹窗前执行
-        var beforeOpen = function () {
-            RequestByAjax({
-                url: detailUrl,
-                type: 'GET',
-                data: {id: $('#Id').val()},
-                success: function (response) {
-                    $('#Name').val(response.Name);
-                },
-                error: function () {
-                }
-            });
+        var beforeOpen = {
+            edit:function() {
+                RequestByAjax({
+                    url: detailUrl,
+                    type: 'GET',
+                    data: {id: $('#Id').val()},
+                    success: function (response) {
+                        $('#Name').val(response.Name);
+                    },
+                    error: function () {
+                    }
+                })
+            }
         };
         $('#addNewItem').on('click', function () {
             $('#editModalForm').find('input').val("");

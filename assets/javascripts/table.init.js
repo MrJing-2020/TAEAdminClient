@@ -5,6 +5,7 @@ function TableInit(param) {
             serverSide: true,   //启用服务器端分页
             searching: false,    //禁用原生搜索
             processing: false,
+            autoWidth:true,
             columns: param.columns,
             sDom: CONSTANT.DATA_TABLES.DEFAULT_OPTION.sDom,
             oLanguage: CONSTANT.DATA_TABLES.DEFAULT_OPTION.oLanguage,
@@ -51,11 +52,9 @@ function TableInit(param) {
                 // search
                 var $search = $('.dataTables_filter input', settings.nTableWrapper);
 
-                $search
-                    .attr({
+                $search.attr({
                         placeholder: typeof options.searchPlaceholder !== 'undefined' ? options.searchPlaceholder : 'Search'
-                    })
-                    .addClass('form-control');
+                    }).addClass('form-control');
 
                 if ($.isFunction($.fn.placeholder)) {
                     $search.placeholder();

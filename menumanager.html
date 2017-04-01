@@ -22,11 +22,12 @@
         <h2 class="panel-title">菜单管理</h2>
     </header>
     <div class="panel-body">
-        <table class="table table-bordered table-striped mb-none" id="datatable">
+        <table class="table table-data table-bordered table-striped table-condensed table-hover mb-none" id="datatable">
             <thead>
             <tr>
                 <th>菜单名</th>
-                <th>地址</th>
+                <th>页面地址</th>
+                <th>API地址</th>
                 <th>父级菜单</th>
                 <th>图标</th>
                 <th>操作</th>
@@ -57,22 +58,26 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">菜单名</label>
                             <div class="col-sm-9">
-                                <input type="text" id="MenuName" name="MenuName" class="form-control" placeholder=""
-                                       required/>
+                                <input type="text" id="MenuName" name="MenuName" class="form-control" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">地址</label>
+                            <label class="col-sm-2 control-label">页面地址</label>
                             <div class="col-sm-9">
-                                <input type="text" id="MenuUrl" name="MenuUrl" class="form-control" placeholder=""
-                                       required/>
+                                <input type="text" id="MenuHtmlUrl" name="MenuHtmlUrl" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">API地址</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="MenuApiUrl" name="MenuApiUrl" class="form-control" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">菜单级别</label>
                             <div class="col-sm-9">
                                 <select class="form-control mb-md" id="MenuLever" name="MenuLever">
-                                    <option>选择菜单级别</option>
+                                    <option value="1">选择菜单级别</option>
                                     <option value="1">父级菜单</option>
                                     <option value="2">子菜单</option>
                                 </select>
@@ -142,22 +147,25 @@
         var subDataUrl='api/Admin/MenuManager/SubUserData';
         var delUrl="";
         //打开弹窗前执行
-        var beforeOpen = function () {
-            RequestByAjax({
-                url: detailUrl,
-                type: 'GET',
-                data: {id: $('#Id').val()},
-                success: function (response) {
-                    $('#MenuName').val(response.MenuName);
-                    $('#MenuUrl').val(response.MenuUrl);
-                    $('#MenuLever').val(response.MenuLever);
-                    $('#MenuPareId').val(response.MenuPareId);
-                    $('#Sort').val(response.Sort);
-                    $('#MenuIco').val(response.Name);
-                },
-                error: function () {
-                }
-            });
+        var beforeOpen = {
+            edit:function(){
+                RequestByAjax({
+                    url: detailUrl,
+                    type: 'GET',
+                    data: {id: $('#Id').val()},
+                    success: function (response) {
+                        $('#MenuName').val(response.MenuName);
+                        $('#MenuHtmlUrl').val(response.MenuHtmlUrl);
+                        $('#MenuApiUrl').val(response.MenuApiUrl);
+                        $('#MenuLever').val(response.MenuLever);
+                        $('#MenuPareId').val(response.MenuPareId);
+                        $('#Sort').val(response.Sort);
+                        $('#MenuIco').val(response.MenuIco);
+                    },
+                    error: function () {
+                    }
+                });
+            }
         };
         $('#addNewItem').on('click', function () {
             $('#editModalForm').find('input').val("");
@@ -182,7 +190,10 @@
                         data: "MenuName"
                     },
                     {
-                        data: "MenuUrl"
+                        data: "MenuHtmlUrl"
+                    },
+                    {
+                        data: "MenuApiUrl"
                     },
                     {
                         data: "PareMenuName"
