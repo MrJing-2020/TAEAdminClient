@@ -14,8 +14,12 @@
 }
 .allocationTital{
     padding:0px;
+    padding-left: 5px;
     margin-bottom: 5px;
 }
 .table-data{
     width: 100% !important;
+}
+.radio-content{
+    margin-top: 7px !important;
 }

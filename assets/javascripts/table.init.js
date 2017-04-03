@@ -17,8 +17,11 @@ function TableInit(param) {
                     data:JSON.stringify({
                         "pageNumber":(data.start/data.length)+1,
                         "pageSize":data.length,
+                        //排序字段名(必须与后台字段同名)
                         "orderName":orderName,
+                        //asc desc 正序或者逆序
                         "orderType":data.order[0].dir,
+                        //模糊查询字段，可为多个(字段名必须与后台同名)
                         "search":{}
                     }),
                     success:function (response) {
@@ -29,8 +32,8 @@ function TableInit(param) {
                             data : response.DataList
                         };
                         callback(returnData);
-                        //初始化模态框
-                        ModalInit(param.success);
+                        //执行回调函数
+                        param.success();
                         $('.modal-dismiss').click(function (e) {
                             e.preventDefault();
                             $.magnificPopup.close();
@@ -39,19 +42,15 @@ function TableInit(param) {
                     error:param.ajax.error
                 })
             },
+            //初始化
             fnInitComplete: function(settings, json) {
-                // select 2
                 if ($.isFunction($.fn['select2'])) {
                     $('.dataTables_length select', settings.nTableWrapper).select2({
                         minimumResultsForSearch: -1
                     });
                 }
-
                 var options = $('table', settings.nTableWrapper).data('plugin-options') || {};
-
-                // search
                 var $search = $('.dataTables_filter input', settings.nTableWrapper);
-
                 $search.attr({
                         placeholder: typeof options.searchPlaceholder !== 'undefined' ? options.searchPlaceholder : 'Search'
                     }).addClass('form-control');

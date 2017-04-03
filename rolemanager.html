@@ -149,7 +149,9 @@
                         }
                     }
                 ],
-                success:beforeOpen
+                success: function () {
+                    ModalInit(beforeOpen)
+                }
             });
         };
         userManagerTableInit();

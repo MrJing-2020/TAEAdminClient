@@ -148,7 +148,7 @@
                 <footer class="panel-footer">
                     <div class="row">
                         <div class="col-md-12 text-right">
-                            <button class="btn btn-info modal-confirm edit">提交</button>
+                            <button class="btn btn-info modal-confirm allocation">提交</button>
                             <button class="btn btn-default modal-dismiss">取消</button>
                         </div>
                     </div>
@@ -164,9 +164,10 @@
         var subDataUrl='api/Admin/UserManager/SubUserData';
         var getRoleUrl='api/Admin/UserManager/GetRoleByUser';
         var delUrl="";
+        var allocationUrlUrl="api/Admin/UserManager/RoleAllocationSub";
         //打开弹窗前执行
         var beforeOpen={
-            edti:function () {
+            edit:function () {
                 RequestByAjax({
                     url: detailUrl,
                     type: 'GET',
@@ -223,6 +224,17 @@
         $('.modal-confirm.edit').on('click', function (e) {
             ModalDataSubmit(e, subDataUrl, JSON.stringify($("#editModalForm").serializeNestedObject()));
         });
+        $('.modal-confirm.allocation').on('click', function (e) {
+            var bindIds = new Array();
+            $('#allocationModalForm').find('input[type=checkbox]:checked').each(function () {
+                bindIds.push($(this).val());
+            })
+            var data={
+                Id:$('#Id').val(),
+                BindIds:bindIds
+            }
+            ModalDataSubmit(e,allocationUrlUrl,JSON.stringify(data));
+        });
         $('.modal-confirm.del').on('click', function (e) {
             ModalDataSubmit(e,delUrl,$('#Id').val());
         });
@@ -257,7 +269,9 @@
                         }
                     }
                 ],
-                success:beforeOpen
+                success: function () {
+                    ModalInit(beforeOpen)
+                }
             });
         };
         userManagerTableInit();

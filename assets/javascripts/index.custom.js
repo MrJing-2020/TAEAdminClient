@@ -1,4 +1,5 @@
 ;
+//全局变量 服务地址
 var apiServiceBaseUri = 'http://localhost:8015/';
 
 //用jquery实现简单路由
@@ -7,6 +8,7 @@ function LoadMainContent(viewName) {
     $("#mainContent").load(viewName + '.html', function () {
         $('.nav.nav-main').find('li:not(".nav-parent.nav-expanded.nav-active")').removeClass('nav-active');
         $('#menu-' + viewName).addClass('nav-active');
+        //重新绑定事件
         jQuery.cumTheme();
         jQuery.cumThemeInit();
     });
@@ -45,7 +47,7 @@ function RequestByAjax(param) {
             }else {
                 new PNotify({
                     title: '发生错误！',
-                    text: response.error_description==undefined?"服务器错误":response.error_description,
+                    text: response.msg==undefined?"服务器错误":response.msg,
                     type: 'error',
                     shadow: true,
                     stack: {
@@ -94,6 +96,23 @@ function ModalInit(beforeOpen) {
             }
         });
     };
+    if(beforeOpen.detail!=undefined){
+        $('.modal-with-zoom-anim.detail').magnificPopup({
+            type: 'inline',
+            fixedContentPos: false,
+            fixedBgPos: true,
+            overflowY: 'auto',
+            closeBtnInside: true,
+            preloader: false,
+            midClick: true,
+            removalDelay: 300,
+            mainClass: 'my-mfp-zoom-in',
+            modal: true,
+            callbacks: {
+                beforeOpen: beforeOpen.detail
+            }
+        });
+    };
     $('.modal-with-zoom-anim.other').magnificPopup({
         type: 'inline',
         fixedContentPos: false,
@@ -107,6 +126,7 @@ function ModalInit(beforeOpen) {
         modal: true
     });
 };
+
 function InitKey(ele) {
     $('#Id').val($(ele).attr('trkey'));
 };

@@ -20,12 +20,18 @@ $(function(){
                 window.location.href="./index.html";
             },
             error: function (response) {
-                //$("#message").html(xmlHttpRequest.responseJSON.error_description);
                 $('body').trigger('loading-overlay:hide');
-                $('.alert.alert-danger').text(response.error_description).css('display','');
-                setTimeout(function() {
-                    $('.alert.alert-danger').css('display','none');
-                }, 3000);
+                new PNotify({
+                    title: '发生错误！',
+                    text: response.msg==undefined?"服务器错误":response.msg,
+                    type: 'error',
+                    shadow: true,
+                    stack: {
+                        "push": "top",
+                        "context": ($('.mfp-container').length && $('.mfp-container').length > 0) ? $('.mfp-container') : $("body"),
+                        "modal": false
+                    }
+                });
             }
         });
     });
