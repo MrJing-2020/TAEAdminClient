@@ -93,17 +93,37 @@
                 </footer>
             </section>
         </div>
+        <div id="modalAllocation" class="zoom-anim-dialog modal-block modal-block-info mfp-hide">
+            <section class="panel">
+                <header class="panel-heading">
+                    <h2 class="panel-title">分配角色</h2>
+                </header>
+                <div class="panel-body" id="treeContent">
+                    <div id="treeCheckbox">
+                    </div>
+                </div>
+                <footer class="panel-footer">
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <button class="btn btn-info modal-confirm allocation">提交</button>
+                            <button class="btn btn-default modal-dismiss">取消</button>
+                        </div>
+                    </div>
+                </footer>
+            </section>
+        </div>
     </div>
 </section>
 <script type="text/javascript">
     (function ($) {
-        var listUrl='api/Admin/RoleManager/AllRoles';
-        var detailUrl='api/Admin/RoleManager/GetRoleDetail';
-        var subDataUrl='api/Admin/RoleManager/SubRoleData';
-        var delUrl="";
+        var listUrl = 'api/Admin/RoleManager/AllRoles';
+        var detailUrl = 'api/Admin/RoleManager/GetRoleDetail';
+        var subDataUrl = 'api/Admin/RoleManager/SubRoleData';
+        var getRoleAuthorityUri='api/Admin/Authority/GetRoleAuthority'
+        var delUrl = "";
         //打开弹窗前执行
         var beforeOpen = {
-            edit:function() {
+            edit: function () {
                 RequestByAjax({
                     url: detailUrl,
                     type: 'GET',
@@ -114,16 +134,80 @@
                     error: function () {
                     }
                 })
+            },
+            allocation:function () {
+                $('#treeContent').empty();
+                RequestByAjax({
+                    url: getRoleAuthorityUri,
+                    type: 'GET',
+                    data: {id: $('#Id').val()},
+                    success: function (response) {
+                        var htmlIn='<div id="treeCheckbox"><ul>';
+                        for(var key1 in response.menuAll){
+                            if(response.menuAll[key1].MenuLever==3){
+                                continue;
+                            }
+                            htmlIn+= '<li class="colored-icon">';
+                            htmlIn+= response.menuAll[key1].MenuName;
+                            htmlIn+='<ul>';
+                            for(var key2 in response.menuAll){
+                                if(response.menuAll[key2].MenuLever==1){
+                                    continue;
+                                }
+                                if(response.menuAll[key2].MenuPareId==response.menuAll[key1].Id){
+                                    htmlIn+='<li class="colored-icon">';
+                                    if(response.menuAll[key1].IsParent==false){
+                                        htmlIn+=response.menuAll[key2].MenuName;
+                                    }else {
+                                        htmlIn+=response.menuAll[key2].MenuName;
+                                        htmlIn+='<ul>';
+                                        for(var key3 in response.menuAll){
+                                            if(response.menuAll[key3].MenuLever==3&&response.menuAll[key3].MenuPareId==response.menuAll[key2].Id){
+                                                htmlIn+= '<li class="colored-icon">';
+                                                htmlIn+= response.menuAll[key3].MenuName;
+                                                htmlIn+='</li>'
+                                            }
+                                        }
+                                        htmlIn+='</ul>';
+                                    }
+                                    htmlIn+='</li>'
+                                }
+                            }
+                            htmlIn+='</ul>'
+                            htmlIn+='</li>';
+                        };
+                        htmlIn+= '</ul></div>';
+                        $('#treeContent').append(htmlIn);
+                        $('#treeCheckbox').jstree({
+                            'core' : {
+                                'themes' : {
+                                    'responsive': false
+                                }
+                            },
+                            'types' : {
+                                'default' : {
+                                    'icon' : 'fa fa-folder'
+                                },
+                                'file' : {
+                                    'icon' : 'fa fa-file'
+                                }
+                            },
+                            'plugins': ['types', 'checkbox']
+                        });
+                    },
+                    error: function () {
+                    }
+                });
             }
         };
         $('#addNewItem').on('click', function () {
             $('#editModalForm').find('input').val("");
         });
         $('.modal-confirm.edit').on('click', function (e) {
-            ModalDataSubmit(e, subDataUrl,JSON.stringify($("#editModalForm").serializeNestedObject()));
+            ModalDataSubmit(e, subDataUrl, JSON.stringify($("#editModalForm").serializeNestedObject()));
         });
         $('.modal-confirm.del').on('click', function (e) {
-            ModalDataSubmit(e,delUrl,$('#Id').val());
+            ModalDataSubmit(e, delUrl, $('#Id').val());
         });
         function userManagerTableInit() {
             TableInit({
@@ -139,12 +223,13 @@
                         data: "Name"
                     },
                     {
-                        className:'actions table-td',
-                        data:"Id",
-                        render : function(data,type, row, meta) {
-                            var trHtml='';
+                        className: 'actions table-td',
+                        data: "Id",
+                        render: function (data, type, row, meta) {
+                            var trHtml = '';
                             trHtml += '<button href="#modalEdit" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim edit mb-xs mt-xs mr-xs btn btn-xs btn-primary"><i class="fa fa-edit"></i> </button>';
                             trHtml += '<button href="#modalDelete" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-danger"><i class="fa fa-remove"></i> </button>';
+                            trHtml += '<button href="#modalAllocation" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim allocation mb-xs mt-xs mr-xs btn btn-xs btn-info"><i class="fa fa-user"></i> </button>';
                             return trHtml;
                         }
                     }
@@ -156,4 +241,6 @@
         };
         userManagerTableInit();
     }).apply(this, [jQuery])
+
 </script>
+<!--<script src="assets/javascripts/ui-elements/examples.treeview.js"></script>-->
