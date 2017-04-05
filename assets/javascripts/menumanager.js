@@ -6,6 +6,59 @@
     var delUrl = "";
     var getActionsUrl = 'api/Admin/MenuManager/GetActions';
     var subActionUrl = 'api/Admin/MenuManager/SubAction';
+    var getParMenusUrl='api/Admin/MenuManager/GetParMenus';
+    var getParMenus= function () {
+        RequestByAjax({
+            url: getParMenusUrl,
+            type: 'GET',
+            data: {},
+            success: function (response) {
+                $("#MenuPareId").empty();
+                var optionHtml='<option value="0">选择父级菜单</option>';
+                for(var key in response){
+                    optionHtml+='<option value='+response[key].Id+'>'+response[key].MenuName+'</option>'
+                }
+                $("#MenuPareId").append(optionHtml);
+            },
+            error: function () {
+            }
+        });
+    };
+    var bindFormEleEvent= function () {
+        $("input[name='IsParent']").click(function () {
+            if($("#IsParent").get(0).checked){
+                $(".canHidden").css("display","none");
+                $('#MenuLever').val(1);
+                $('#MenuPareId').val(0);
+            }else {
+                $(".canHidden").css("display","")
+            }
+        });
+        $('#MenuLever').change(function () {
+            if($('#MenuLever').val()==1){
+                $('#MenuPareId').val(0).attr("disabled",true);
+            }else {
+                $('#MenuPareId').removeAttr("disabled");
+            }
+        });
+        $('#MenuIco').unbind("click");
+        $("#MenuIco").click(function () {
+            iconSelect();
+            $(".demo-icon-hover").click(function () {
+                alert($(this).find('i').attr("class"))
+            })
+        })
+
+    }
+    var iconSelect = function () {
+        layer.open({
+            type: 2,
+            area: ['700px', '530px'],
+            fixed: false, //不固定
+            maxmin: true,
+            content: './icon.html'
+        });
+    }
     //打开弹窗前执行
     var beforeOpen = {
         edit: function () {
@@ -14,18 +67,28 @@
                 type: 'GET',
                 data: {id: $('#Id').val()},
                 success: function (response) {
-                    $('#MenuName').val(response.MenuName);
-                    $('#MenuHtmlUrl').val(response.MenuHtmlUrl);
-                    $('#MenuApiUrl').val(response.MenuApiUrl);
-                    $('#MenuLever').val(response.MenuLever);
-                    $('#MenuPareId').val(response.MenuPareId);
-                    $('#Sort').val(response.Sort);
-                    $('#MenuIco').val(response.MenuIco);
+                    getParMenus();
                     if(response.IsParent==true){
                         $("#IsParent").get(0).checked=true;
+                        $(".canHidden").css("display","none")
                     }else {
                         $("#NotParent").get(0).checked=true;
+                        $(".canHidden").css("display","")
                     }
+                    $('#MenuName').val(response.MenuName);
+                    $('#MenuHtmlUrl').val(response.MenuHtmlUrl);
+                    $('#Area').val(response.Area);
+                    $('#Controller').val(response.Controller);
+                    $('#Action').val(response.Action);
+                    $('#MenuLever').val(response.MenuLever);
+                    $('#MenuPareId').val(response.MenuPareId);
+                    if($('#MenuLever').val()==1){
+                        $('#MenuPareId').attr("disabled",true)
+                    }
+                    $('#Sort').val(response.Sort);
+                    $('#MenuIco').val(response.MenuIco);
+                    $(".iconShowContent i").attr("class",response.MenuIco)
+                    bindFormEleEvent();
                 },
                 error: function () {
                 }
@@ -58,7 +121,7 @@
                             $("#actionName").val($(this).parent().prev().prev().text());
                         })
                     } else {
-                        $("#detailContent").append("没有任何内容！");
+                        $("#detailContent").append('<tr><td colspan="3">没有任何内容！</td></tr>>');
                     }
                 },
                 error: function () {
@@ -67,7 +130,10 @@
         }
     };
     $('#addNewItem').on('click', function () {
-        $('#editModalForm').find('input').val("");
+        $('#editModalForm').find('input[type="text"]').val("");
+        $(".iconShowContent i").attr("class","");
+        bindFormEleEvent();
+        getParMenus();
     });
     $('.modal-confirm.edit').on('click', function (e) {
         ModalDataSubmit(e, subDataUrl, JSON.stringify($("#editModalForm").serializeNestedObject()));
@@ -107,6 +173,7 @@
                     data: "PareMenuName"
                 },
                 {
+                    className:"center",
                     data: "MenuIco",
                     render: function (data, type, row, meta) {
                         return '<i class="' + data + '"></i>';

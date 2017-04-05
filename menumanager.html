@@ -56,41 +56,48 @@
                     <form class="form-horizontal" id="editModalForm" novalidate="novalidate">
                         <input type="hidden" id="Id" name="Id"/>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">菜单名</label>
-                            <div class="col-sm-8">
-                                <input type="text" id="MenuName" name="MenuName" class="form-control"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">页面地址</label>
-                            <div class="col-sm-8">
-                                <input type="text" id="MenuHtmlUrl" name="MenuHtmlUrl" class="form-control"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">API地址</label>
-                            <div class="col-sm-8">
-                                <input type="text" id="MenuApiUrl" name="MenuApiUrl" class="form-control"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label class="col-sm-3 control-label">是否为父菜单</label>
                             <div class="col-sm-8 radio-content">
                                 <div class="col-sm-2">
                                     <div class="radio-custom">
-                                        <input type="radio" name="IsParent" id="IsParent" value=true>
+                                        <input type="radio" name="IsParent" id="IsParent" value="true">
                                         <label for="isParent">是</label>
                                     </div>
                                 </div>
                                 <div class="col-sm-2">
                                     <div class="radio-custom">
-                                        <input type="radio" name="IsParent" id="NotParent" value=false checked>
+                                        <input type="radio" name="IsParent" id="NotParent" value="false" checked>
                                         <label for="notParent">否</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-sm-3 control-label">菜单名</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="MenuName" name="MenuName" class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-group canHidden">
+                            <label class="col-sm-3 control-label">页面地址</label>
+                            <div class="col-sm-8">
+                                <input type="text" id="MenuHtmlUrl" name="MenuHtmlUrl" class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="form-group canHidden">
+                            <label class="col-sm-3 control-label">API地址</label>
+                            <div class="col-sm-2">
+                                <input type="text" id="Area" name="Area" class="form-control" placeholder="Area"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <input type="text" id="Controller" name="Controller" class="form-control" placeholder="Controller"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <input type="text" id="Action" name="Action" class="form-control" placeholder="Action"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group canHidden">
                             <label class="col-sm-3 control-label">菜单级别</label>
                             <div class="col-sm-8">
                                 <select class="form-control mb-md" id="MenuLever" name="MenuLever">
@@ -100,7 +107,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group canHidden">
                             <label class="col-sm-3 control-label">父级菜单</label>
                             <div class="col-sm-8">
                                 <select class="form-control mb-md" id="MenuPareId" name="MenuPareId">
@@ -117,7 +124,10 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">图标</label>
                             <div class="col-sm-8">
-                                <input type="text" id="MenuIco" name="MenuIco" class="form-control"/>
+                                <input type="text" id="MenuIco" name="MenuIco" class="form-control iconInput"/>
+                            </div>
+                            <div class="col-sm-1 iconShowContent">
+                                <i class=""></i>
                             </div>
                         </div>
                     </form>
@@ -196,7 +206,7 @@
             </section>
         </div>
         <div id="modalActionEdit" class="zoom-anim-dialog modal-block modal-block-sm modal-block-primary mfp-hide">
-            <section class="panel">
+            <section class="panel" >
                 <header class="panel-heading">
                     <h2 class="panel-title">编辑操作</h2>
                 </header>

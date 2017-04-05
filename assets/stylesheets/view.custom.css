@@ -7,6 +7,7 @@
 }
 .tfoot-td{
     padding: 0px 5px !important;
+    text-align: left !important;
 }
 .actions.table-td{
     padding:0px !important;
@@ -22,4 +23,11 @@
 }
 .radio-content{
     margin-top: 7px !important;
+    padding-left: 0px !important;
+}
+.iconShowContent{
+    padding-left: 0px !important;
+}
+.iconShowContent i{
+    margin-top: 10px !important;
 }

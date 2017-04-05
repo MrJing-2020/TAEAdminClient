@@ -96,7 +96,7 @@
         <div id="modalAllocation" class="zoom-anim-dialog modal-block modal-block-info mfp-hide">
             <section class="panel">
                 <header class="panel-heading">
-                    <h2 class="panel-title">分配角色</h2>
+                    <h2 class="panel-title">操作权限管理</h2>
                 </header>
                 <div class="panel-body" id="treeContent">
                     <div id="treeCheckbox">
@@ -119,7 +119,8 @@
         var listUrl = 'api/Admin/RoleManager/AllRoles';
         var detailUrl = 'api/Admin/RoleManager/GetRoleDetail';
         var subDataUrl = 'api/Admin/RoleManager/SubRoleData';
-        var getRoleAuthorityUri='api/Admin/Authority/GetRoleAuthority'
+        var getRoleAuthorityUrl='api/Admin/Authority/GetRoleAuthority';
+        var updateAuthorityUrl='api/Admin/Authority/UpdateAuthority';
         var delUrl = "";
         //打开弹窗前执行
         var beforeOpen = {
@@ -138,33 +139,43 @@
             allocation:function () {
                 $('#treeContent').empty();
                 RequestByAjax({
-                    url: getRoleAuthorityUri,
+                    url: getRoleAuthorityUrl,
                     type: 'GET',
                     data: {id: $('#Id').val()},
                     success: function (response) {
+                        var selected=JSON.stringify({ "selected" : true });
                         var htmlIn='<div id="treeCheckbox"><ul>';
-                        for(var key1 in response.menuAll){
-                            if(response.menuAll[key1].MenuLever==3){
+                        for(var key1 in response){
+                            if(response[key1].MenuLever!=1){
                                 continue;
                             }
-                            htmlIn+= '<li class="colored-icon">';
-                            htmlIn+= response.menuAll[key1].MenuName;
+                            htmlIn+= '<li class="colored-icon" value='+response[key1].Id+'>';
+                            htmlIn+= response[key1].MenuName;
                             htmlIn+='<ul>';
-                            for(var key2 in response.menuAll){
-                                if(response.menuAll[key2].MenuLever==1){
+                            for(var key2 in response){
+                                if(response[key2].MenuLever==1){
                                     continue;
                                 }
-                                if(response.menuAll[key2].MenuPareId==response.menuAll[key1].Id){
-                                    htmlIn+='<li class="colored-icon">';
-                                    if(response.menuAll[key1].IsParent==false){
-                                        htmlIn+=response.menuAll[key2].MenuName;
+                                if(response[key2].MenuPareId==response[key1].Id){
+                                    if(response[key1].IsParent==false){
+                                        if(response[key2].IsInAuthority==true){
+                                            htmlIn+='<li class="colored-icon" value='+response[key2].Id+' data-jstree='+selected+'>';
+                                        }else {
+                                            htmlIn+='<li class="colored-icon" value='+response[key2].Id+'>';
+                                        }
+                                        htmlIn+=response[key2].MenuName;
                                     }else {
-                                        htmlIn+=response.menuAll[key2].MenuName;
+                                        htmlIn+='<li class="colored-icon" value='+response[key2].Id+'>';
+                                        htmlIn+=response[key2].MenuName;
                                         htmlIn+='<ul>';
-                                        for(var key3 in response.menuAll){
-                                            if(response.menuAll[key3].MenuLever==3&&response.menuAll[key3].MenuPareId==response.menuAll[key2].Id){
-                                                htmlIn+= '<li class="colored-icon">';
-                                                htmlIn+= response.menuAll[key3].MenuName;
+                                        for(var key3 in response){
+                                            if(response[key3].MenuLever==3&&response[key3].MenuPareId==response[key2].Id){
+                                                if(response[key3].IsInAuthority==true){
+                                                    htmlIn+= '<li class="colored-icon" value='+response[key3].Id+' data-jstree='+selected+'>';
+                                                }else {
+                                                    htmlIn+= '<li class="colored-icon" value='+response[key3].Id+'>';
+                                                }
+                                                htmlIn+= response[key3].MenuName;
                                                 htmlIn+='</li>'
                                             }
                                         }
@@ -181,7 +192,7 @@
                         $('#treeCheckbox').jstree({
                             'core' : {
                                 'themes' : {
-                                    'responsive': false
+                                    'responsive': true
                                 }
                             },
                             'types' : {
@@ -205,6 +216,20 @@
         });
         $('.modal-confirm.edit').on('click', function (e) {
             ModalDataSubmit(e, subDataUrl, JSON.stringify($("#editModalForm").serializeNestedObject()));
+        });
+        $('.modal-confirm.allocation').on('click', function (e) {
+            var data={
+                Id:$('#Id').val(),
+                BindIds:[]
+            }
+            $(".jstree-clicked").each(function () {
+                data.BindIds.push($(this).parent().attr('value'));
+            })
+            $(".jstree-undetermined").each(function () {
+                data.BindIds.push($(this).parent().parent().attr('value'));
+            })
+//            alert(data.BindIds)
+            ModalDataSubmit(e, updateAuthorityUrl, JSON.stringify(data));
         });
         $('.modal-confirm.del').on('click', function (e) {
             ModalDataSubmit(e, delUrl, $('#Id').val());
@@ -230,6 +255,7 @@
                             trHtml += '<button href="#modalEdit" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim edit mb-xs mt-xs mr-xs btn btn-xs btn-primary"><i class="fa fa-edit"></i> </button>';
                             trHtml += '<button href="#modalDelete" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-danger"><i class="fa fa-remove"></i> </button>';
                             trHtml += '<button href="#modalAllocation" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim allocation mb-xs mt-xs mr-xs btn btn-xs btn-info"><i class="fa fa-user"></i> </button>';
+                            trHtml += '<button href="#modalAllocation" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim allocation mb-xs mt-xs mr-xs btn btn-xs btn-warning"><i class="fa fa-database"></i> </button>';
                             return trHtml;
                         }
                     }
@@ -241,6 +267,4 @@
         };
         userManagerTableInit();
     }).apply(this, [jQuery])
-
 </script>
-<!--<script src="assets/javascripts/ui-elements/examples.treeview.js"></script>-->
