@@ -112,7 +112,7 @@
                     <label class="col-md-2 control-label">母公司</label>
                     <div class="col-md-9">
                         <select class="form-control input-sm" id="PreCompanyId" name="PreCompanyId">
-                            <option value="">选择母公司(没有可不选)</option>
+                            <option value="#">选择母公司(没有可不选)</option>
                         </select>
                     </div>
                 </div>
@@ -186,7 +186,7 @@
                 type: 'GET',
                 data: {},
                 success: function (response) {
-                    var optionsHtml='<option value="">选择母公司(没有可不选)</option>';
+                    var optionsHtml='<option value="#">选择母公司(没有可不选)</option>';
                     if(response.length>0){
                         for(var key in response){
                             optionsHtml+='<option value='+response[key].Key+'>'+response[key].Value+'</option>';
@@ -221,18 +221,8 @@
                             },
                             'check_callback' : true,
                             'data':response
-                        },
-                        'types' : {
-                            'default' : {
-                                'icon' : 'fa fa-folder'
-                            },
-                            'file' : {
-                                'icon' : 'fa fa-file'
-                            }
-                        },
-                        'plugins': ['types']
+                        }
                     }).on("ready.jstree", function (e, data) {
-
                     });
                     $("#treeOrgz").bind("select_node.jstree", function (e, data) {
                         var id=data.node.id;

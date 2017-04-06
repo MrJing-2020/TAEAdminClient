@@ -142,73 +142,9 @@
                     url: getRoleAuthorityUrl,
                     type: 'GET',
                     data: {id: $('#Id').val()},
-//                    success: function (response) {
-//                        var selected=JSON.stringify({ "selected" : true });
-//                        var htmlIn='<div id="treeCheckbox"><ul>';
-//                        for(var key1 in response){
-//                            if(response[key1].MenuLever!=1){
-//                                continue;
-//                            }
-//                            htmlIn+= '<li class="colored-icon" value='+response[key1].Id+'>';
-//                            htmlIn+= response[key1].MenuName;
-//                            htmlIn+='<ul>';
-//                            for(var key2 in response){
-//                                if(response[key2].MenuLever==1){
-//                                    continue;
-//                                }
-//                                if(response[key2].MenuPareId==response[key1].Id){
-//                                    if(response[key1].IsParent==false){
-//                                        if(response[key2].IsInAuthority==true){
-//                                            htmlIn+='<li class="colored-icon" value='+response[key2].Id+' data-jstree='+selected+'>';
-//                                        }else {
-//                                            htmlIn+='<li class="colored-icon" value='+response[key2].Id+'>';
-//                                        }
-//                                        htmlIn+=response[key2].MenuName;
-//                                    }else {
-//                                        htmlIn+='<li class="colored-icon" value='+response[key2].Id+'>';
-//                                        htmlIn+=response[key2].MenuName;
-//                                        htmlIn+='<ul>';
-//                                        for(var key3 in response){
-//                                            if(response[key3].MenuLever==3&&response[key3].MenuPareId==response[key2].Id){
-//                                                if(response[key3].IsInAuthority==true){
-//                                                    htmlIn+= '<li class="colored-icon" value='+response[key3].Id+' data-jstree='+selected+'>';
-//                                                }else {
-//                                                    htmlIn+= '<li class="colored-icon" value='+response[key3].Id+'>';
-//                                                }
-//                                                htmlIn+= response[key3].MenuName;
-//                                                htmlIn+='</li>'
-//                                            }
-//                                        }
-//                                        htmlIn+='</ul>';
-//                                    }
-//                                    htmlIn+='</li>'
-//                                }
-//                            }
-//                            htmlIn+='</ul>'
-//                            htmlIn+='</li>';
-//                        };
-//                        htmlIn+= '</ul></div>';
-//                        $('#treeContent').append(htmlIn);
-//                        $('#treeCheckbox').jstree({
-//                            'core' : {
-//                                'themes' : {
-//                                    'responsive': false
-//                                }
-//                            },
-//                            'types' : {
-//                                'default' : {
-//                                    'icon' : 'fa fa-folder'
-//                                },
-//                                'file' : {
-//                                    'icon' : 'fa fa-file'
-//                                }
-//                            },
-//                            'plugins': ['types', 'checkbox']
-//                        });
-//                    },
                     success:function (response) {
-                        alert("hh");
-                        $('#treeContent').jstree({
+                        $('#treeContent').append('<div id="treeCheckbox"></div>');
+                        $('#treeCheckbox').jstree({
                             'core' : {
                                 'themes' : {
                                     'responsive': false
@@ -235,13 +171,7 @@
                 Id:$('#Id').val(),
                 BindIds:[]
             }
-            $(".jstree-clicked").each(function () {
-                data.BindIds.push($(this).parent().attr('value'));
-            })
-            $(".jstree-undetermined").each(function () {
-                data.BindIds.push($(this).parent().parent().attr('value'));
-            })
-//            alert(data.BindIds)
+            data.BindIds= $('#treeCheckbox').jstree('get_selected');
             ModalDataSubmit(e, updateAuthorityUrl, JSON.stringify(data));
         });
         $('.modal-confirm.del').on('click', function (e) {

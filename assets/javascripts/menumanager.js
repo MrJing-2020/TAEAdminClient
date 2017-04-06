@@ -14,7 +14,7 @@
             data: {},
             success: function (response) {
                 $("#MenuPareId").empty();
-                var optionHtml='<option value="0">选择父级菜单</option>';
+                var optionHtml='<option value="#">选择父级菜单</option>';
                 for(var key in response){
                     optionHtml+='<option value='+response[key].Id+'>'+response[key].MenuName+'</option>'
                 }
@@ -29,7 +29,7 @@
             if($("#IsParent").get(0).checked){
                 $(".canHidden").css("display","none");
                 $('#MenuLever').val(1);
-                $('#MenuPareId').val(0);
+                $('#MenuPareId').val("#");
             }else {
                 $(".canHidden").css("display","")
             }
