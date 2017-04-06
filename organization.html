@@ -1,0 +1,259 @@
+<header class="page-header">
+    <h2>组织结构</h2>
+    <div class="right-wrapper pull-right">
+        <ol class="breadcrumbs">
+            <li>
+                <a href="index.html">
+                    <i class="fa fa-home"></i>
+                </a>
+            </li>
+            <li><span>组织结构</span></li>
+        </ol>
+        <a class="sidebar-right-toggle" data-open="sidebar-right"><i class="fa fa-chevron-left"></i></a>
+    </div>
+</header>
+<div class="row">
+    <div class="col-md-4">
+        <section class="panel">
+            <header class="panel-heading">
+                <div class="panel-actions">
+                    <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
+                    <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+                </div>
+                <h2 class="panel-title">
+                    组织结构
+                    <button id="addNewItem" href="#modalEdit"
+                            class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-primary" style="margin-left: 10px;">
+                        Add<i class="fa fa-plus"></i>
+                    </button>
+                </h2>
+            </header>
+            <div class="panel-body">
+                <div id="treeOrgz">
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="col-md-8">
+        <section class="panel">
+            <header class="panel-heading">
+                <div class="panel-actions">
+                    <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
+                    <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+                </div>
+                <h2 class="panel-title">公司信息</h2>
+            </header>
+            <div class="panel-body">
+                <div id="companyDetail">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <section class="panel">
+                                <header class="panel-heading bg-white">
+                                    <div class="panel-heading-icon bg-primary mt-sm">
+                                        <i class="fa fa-rocket"></i>
+                                    </div>
+                                </header>
+                                <div class="panel-body">
+                                    <h3 class="text-weight-semibold mt-none text-center" id="showCompanyName">Simple</h3>
+                                    <ul class="simple-bullet-list mb-xlg">
+                                        <li class="com-detail-item inline">
+                                            <span class="title">
+                                                公司法人:
+                                                <span class="com-detail-item" id="showLegalPersonName">Lorem.</span>
+                                            </span>
+                                        </li>
+                                        <li class="com-detail-item inline">
+                                            <span class="title">
+                                                联系人:
+                                                <span class="com-detail-item" id="showLinkPersonName">Lorem</span>
+                                            </span>
+                                        </li>
+                                        <li class="com-detail-item inline">
+                                            <span class="title">
+                                                电话:
+                                                <span class="com-detail-item" id="showPhoneNumber">Lorem</span>
+                                            </span>
+
+                                        </li>
+                                        <li class="orange com-detail-item">
+                                            <span class="title">主营业务</span>
+                                            <span class="description truncate com-detail-item" id="showBusinessRange">Lorem ipsom dolor sit.Lorem ipsom dolor sit.Lorem ipsom dolor sit.Lorem ipsom dolor sit.Lorem ipsom dolor sit.Lorem ipsom dolor sit.Lorem ipsom dolor sit.Lorem ipsom dolor sit.</span>
+                                        </li>
+                                        <li class="green com-detail-item">
+                                            <span class="title">公司地址</span>
+                                            <span class="description truncate com-detail-item" id="showAddress">Lorem ipsom dolor sit.</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<!-- 弹出框 -->
+<div id="modalEdit" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
+    <section class="panel">
+        <header class="panel-heading">
+            <h2 class="panel-title">编辑</h2>
+        </header>
+        <div class="panel-body">
+            <form class="form-horizontal mb-lg" id="editModalForm" novalidate="novalidate">
+                <input type="hidden" id="Id" name="Id"/>
+                <div class="form-group mt-lg">
+                    <label class="col-sm-2 control-label">公司名</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="CompanyName" name="CompanyName" class="form-control input-sm"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">母公司</label>
+                    <div class="col-md-9">
+                        <select class="form-control input-sm" id="PreCompanyId" name="PreCompanyId">
+                            <option value="">选择母公司(没有可不选)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group mt-lg">
+                    <label class="col-sm-2 control-label">法人</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="LegalPersonName" name="LegalPersonName" class="form-control input-sm"/>
+                    </div>
+                </div>
+                <div class="form-group mt-lg">
+                    <label class="col-sm-2 control-label">联系人</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="LinkPersonName" name="LinkPersonName" class="form-control input-sm"/>
+                    </div>
+                </div>
+                <div class="form-group mt-lg">
+                    <label class="col-sm-2 control-label">电话</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="PhoneNumber" name="PhoneNumber" class="form-control input-sm"/>
+                    </div>
+                </div>
+                <div class="form-group mt-lg">
+                    <label class="col-md-2 control-label">主营业务</label>
+                    <div class="col-md-9">
+                        <textarea class="form-control input-sm" rows="2" id="BusinessRange" name="BusinessRange"></textarea>
+                    </div>
+                </div>
+                <div class="form-group mt-lg">
+                    <label class="col-sm-2 control-label">地址</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="Address" name="Address" class="form-control input-sm"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <footer class="panel-footer">
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <button class="btn btn-primary modal-confirm edit">提交</button>
+                    <button class="btn btn-default modal-dismiss">取消</button>
+                </div>
+            </div>
+        </footer>
+    </section>
+</div>
+<script type="text/javascript">
+    (function ($) {
+        var getAllOrgzUrl = 'api/Admin/Organization/GetAllOrgz';
+        var subComDataUrl='api/Admin/Organization/SubComData';
+        var getComDetailUrl='api/Admin/Organization/GetComDetail';
+        var getAllCompanyUrl='api/Admin/Organization/GetAllCompany';
+        //打开弹窗前执行
+        var beforeOpen = {
+            edit: function () {
+                RequestByAjax({
+                    url: '',
+                    type: 'GET',
+                    data: {id: $('#Id').val()},
+                    success: function (response) {
+                    },
+                    error: function () {
+                    }
+                })
+            }
+        };
+        ModalInit(beforeOpen);
+        $('#addNewItem').on('click', function () {
+            $('#editModalForm').find('input').val("");
+            RequestByAjax({
+                url: getAllCompanyUrl,
+                type: 'GET',
+                data: {},
+                success: function (response) {
+                    var optionsHtml='<option value="">选择母公司(没有可不选)</option>';
+                    if(response.length>0){
+                        for(var key in response){
+                            optionsHtml+='<option value='+response[key].Key+'>'+response[key].Value+'</option>';
+                        }
+                    }
+                    $("#PreCompanyId").empty();
+                    $("#PreCompanyId").append(optionsHtml);
+                },
+                error: function () {
+                }
+            })
+        });
+        //提交编辑和新增表单
+        $('.modal-confirm.edit').on('click', function (e) {
+            ModalDataSubmit(e, subComDataUrl, JSON.stringify($("#editModalForm").serializeNestedObject()));
+        });
+        RequestByAjax({
+            url: getAllOrgzUrl,
+            type: 'GET',
+            data: {},
+            success: function (response) {
+                if(response.length>0){
+                    for(var key in response){
+                        if(response[key].type=="root"){
+                            response[key].state={"opened": true};
+                        }
+                    }
+                    $('#treeOrgz').jstree({
+                        'core' : {
+                            'themes' : {
+                                'responsive': false
+                            },
+                            'check_callback' : true,
+                            'data':response
+                        },
+                        'types' : {
+                            'default' : {
+                                'icon' : 'fa fa-folder'
+                            },
+                            'file' : {
+                                'icon' : 'fa fa-file'
+                            }
+                        },
+                        'plugins': ['types']
+                    }).on("ready.jstree", function (e, data) {
+
+                    });
+                    $("#treeOrgz").bind("select_node.jstree", function (e, data) {
+                        var id=data.node.id;
+                        $('#Id').val(id);
+                        RequestByAjax({
+                            url: getComDetailUrl,
+                            type: 'GET',
+                            data: {id: id},
+                            success: function (DetailData) {
+                                for(var key in DetailData){
+                                    $("#show"+key).text(DetailData[key]);
+                                }
+                            },
+                            error: function () {
+                            }
+                        })
+                    });
+                }
+            },
+            error: function () {
+            }
+        })
+    }).apply(this, [jQuery])
+</script>

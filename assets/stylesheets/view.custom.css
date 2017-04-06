@@ -9,13 +9,15 @@
     padding: 0px 5px !important;
     text-align: left !important;
 }
+#addNewItem i{
+    margin-left: 3px !important;
+}
 .actions.table-td{
     padding:0px !important;
     padding-left: 5px !important;
 }
 .allocationTital{
-    padding:0px;
-    padding-left: 5px;
+    padding:0px 0px 0px 5px;
     margin-bottom: 5px;
 }
 .table-data{
@@ -30,4 +32,18 @@
 }
 .iconShowContent i{
     margin-top: 10px !important;
+}
+.com-detail-item .title{
+    font-size: 15px !important;
+    color: black !important;
+}
+.com-detail-item span{
+     font-size: 15px !important;
+     color: #999999 !important;
+ }
+.com-detail-item.inline{
+    display:inline-block !important;
+    width: 30%;
+}
+.com-detail-item.inline span{
 }

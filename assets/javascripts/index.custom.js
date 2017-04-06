@@ -125,6 +125,10 @@ function ModalInit(beforeOpen) {
         mainClass: 'my-mfp-zoom-in',
         modal: true
     });
+    $('.modal-dismiss').click(function (e) {
+        e.preventDefault();
+        $.magnificPopup.close();
+    });
 };
 
 function InitKey(ele) {
@@ -152,10 +156,5 @@ $(function () {
     }
     $('.a-route').click(function () {
         LoadMainContent($(this).attr("href").substring(1));
-    });
-
-    $('.modal-dismiss').click(function (e) {
-        e.preventDefault();
-        $.magnificPopup.close();
     });
 });
