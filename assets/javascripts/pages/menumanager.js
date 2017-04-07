@@ -1,5 +1,6 @@
 ;
 (function ($) {
+    //该也难用到的api地址
     var listUrl = 'api/Admin/MenuManager/AllMenus';
     var detailUrl = 'api/Admin/MenuManager/GetMenuDetail';
     var subDataUrl = 'api/Admin/MenuManager/SubMenuData';
@@ -7,6 +8,7 @@
     var getActionsUrl = 'api/Admin/MenuManager/GetActions';
     var subActionUrl = 'api/Admin/MenuManager/SubAction';
     var getParMenusUrl='api/Admin/MenuManager/GetParMenus';
+
     var getParMenus= function () {
         RequestByAjax({
             url: getParMenusUrl,
@@ -108,14 +110,14 @@
                                 '<tr><td>' + response[i].MenuName + '</td>',
                                 '<td>' + response[i].Action + '</td>',
                                 '<td class="actions">',
-                                '<a href="#modalActionEdit" id=' + response[i].Id + ' class="modal-with-zoom-anim other actionEdit"><i class="fa fa-pencil"></i></a>',
+                                '<a href="#modalDetailEdit" id=' + response[i].Id + ' class="modal-with-zoom-anim other detailEdit"><i class="fa fa-pencil"></i></a>',
                                 '<a href="" id=' + response[i].Id + ' class="delete-row actionDel"><i class="fa fa-trash-o"></i></a>',
                                 '</td></tr>'
                             ].join('');
                         }
                         $("#detailContent").append(htmlDetail);
                         ModalInit(beforeOpen);
-                        $('.actionEdit').click(function () {
+                        $('.detailEdit').click(function () {
                             $("#actionId").val($(this).attr("id"))
                             $("#methodName").val($(this).parent().prev().text());
                             $("#actionName").val($(this).parent().prev().prev().text());
@@ -132,23 +134,40 @@
     $('#addNewItem').on('click', function () {
         $('#editModalForm').find('input[type="text"]').val("");
         $(".iconShowContent i").attr("class","");
+        $("#NotParent").get(0).checked=true;
         bindFormEleEvent();
         getParMenus();
     });
+    //弹出框数据提交
     $('.modal-confirm.edit').on('click', function (e) {
-        ModalDataSubmit(e, subDataUrl, JSON.stringify($("#editModalForm").serializeNestedObject()));
+        ModalDataSubmit({
+            e:e,
+            url:subDataUrl,
+            data:JSON.stringify($("#editModalForm").serializeNestedObject()),
+            reload:true
+        });
     });
     $('.modal-confirm.del').on('click', function (e) {
-        ModalDataSubmit(e, delUrl, $('#Id').val());
+        ModalDataSubmit({
+            e:e,
+            url:delUrl,
+            data:$('#Id').val(),
+            reload:true
+        });
     });
-    $('.modal-confirm.actionSub').on('click', function (e) {
+    $('.modal-confirm.detailSub').on('click', function (e) {
         var data = {
             Id: $("#actionId").val(),
             MenuName: $("#actionName").val(),
             Action: $("#methodName").val(),
             MenuPareId: $("#Id").val()
         }
-        ModalDataSubmit(e, subActionUrl, JSON.stringify(data));
+        ModalDataSubmit({
+            e:e,
+            url:subActionUrl,
+            data:JSON.stringify(data),
+            reload:true
+        });
     });
     function userManagerTableInit() {
         TableInit({
@@ -187,7 +206,7 @@
                         trHtml += '<button href="#modalEdit" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim edit mb-xs mt-xs mr-xs btn btn-xs btn-primary"><i class="fa fa-edit"></i> </button>';
                         trHtml += '<button href="#modalDelete" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-danger"><i class="fa fa-remove"></i> </button>';
                         if(row.IsParent==false){
-                            trHtml += '<button href="#modalChild" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim detail mb-xs mt-xs mr-xs btn btn-xs btn-info"><i class="fa fa-eye"></i> </button>';
+                            trHtml += '<button href="#modalDetail" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim detail mb-xs mt-xs mr-xs btn btn-xs btn-info"><i class="fa fa-eye"></i> </button>';
                         }
                         return trHtml;
                     }

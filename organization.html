@@ -55,6 +55,7 @@
                                 </header>
                                 <div class="panel-body">
                                     <h3 class="text-weight-semibold mt-none text-center" id="showCompanyName">Simple</h3>
+                                    <input type="hidden" id="companyId" />
                                     <ul class="simple-bullet-list mb-xlg">
                                         <li class="com-detail-item inline">
                                             <span class="title">
@@ -84,6 +85,11 @@
                                             <span class="description truncate com-detail-item" id="showAddress">Lorem ipsom dolor sit.</span>
                                         </li>
                                     </ul>
+                                </div>
+                                <div class="panel-footer panel-footer-btn-group">
+                                    <a href="#modalEdit" class="modal-with-zoom-anim edit btn btn-primary"><i class="fa fa-edit "></i> 编辑</a>
+                                    <a href="#modalDetial" class="modal-with-zoom-anim detail btn btn-primary"><i class="fa fa-binoculars"></i> 查看部门</a>
+                                    <a href="#modalDetial" class="btn btn-primary"><i class="fa fa-users"></i> 公司成员</a>
                                 </div>
                             </section>
                         </div>
@@ -158,92 +164,75 @@
         </footer>
     </section>
 </div>
-<script type="text/javascript">
-    (function ($) {
-        var getAllOrgzUrl = 'api/Admin/Organization/GetAllOrgz';
-        var subComDataUrl='api/Admin/Organization/SubComData';
-        var getComDetailUrl='api/Admin/Organization/GetComDetail';
-        var getAllCompanyUrl='api/Admin/Organization/GetAllCompany';
-        //打开弹窗前执行
-        var beforeOpen = {
-            edit: function () {
-                RequestByAjax({
-                    url: '',
-                    type: 'GET',
-                    data: {id: $('#Id').val()},
-                    success: function (response) {
-                    },
-                    error: function () {
-                    }
-                })
-            }
-        };
-        ModalInit(beforeOpen);
-        $('#addNewItem').on('click', function () {
-            $('#editModalForm').find('input').val("");
-            RequestByAjax({
-                url: getAllCompanyUrl,
-                type: 'GET',
-                data: {},
-                success: function (response) {
-                    var optionsHtml='<option value="#">选择母公司(没有可不选)</option>';
-                    if(response.length>0){
-                        for(var key in response){
-                            optionsHtml+='<option value='+response[key].Key+'>'+response[key].Value+'</option>';
-                        }
-                    }
-                    $("#PreCompanyId").empty();
-                    $("#PreCompanyId").append(optionsHtml);
-                },
-                error: function () {
-                }
-            })
-        });
-        //提交编辑和新增表单
-        $('.modal-confirm.edit').on('click', function (e) {
-            ModalDataSubmit(e, subComDataUrl, JSON.stringify($("#editModalForm").serializeNestedObject()));
-        });
-        RequestByAjax({
-            url: getAllOrgzUrl,
-            type: 'GET',
-            data: {},
-            success: function (response) {
-                if(response.length>0){
-                    for(var key in response){
-                        if(response[key].type=="root"){
-                            response[key].state={"opened": true};
-                        }
-                    }
-                    $('#treeOrgz').jstree({
-                        'core' : {
-                            'themes' : {
-                                'responsive': false
-                            },
-                            'check_callback' : true,
-                            'data':response
-                        }
-                    }).on("ready.jstree", function (e, data) {
-                    });
-                    $("#treeOrgz").bind("select_node.jstree", function (e, data) {
-                        var id=data.node.id;
-                        $('#Id').val(id);
-                        RequestByAjax({
-                            url: getComDetailUrl,
-                            type: 'GET',
-                            data: {id: id},
-                            success: function (DetailData) {
-                                for(var key in DetailData){
-                                    $("#show"+key).text(DetailData[key]);
-                                }
-                            },
-                            error: function () {
-                            }
-                        })
-                    });
-                }
-            },
-            error: function () {
-            }
-        })
-    }).apply(this, [jQuery])
-</script>
+<div id="modalDetial" class="zoom-anim-dialog modal-block modal-block-sm modal-block-info mfp-hide">
+    <section class="panel">
+        <header class="panel-heading">
+            <h2 class="panel-title">公司部门</h2>
+        </header>
+        <div class="panel-body">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table mb-none">
+                        <thead>
+                        <tr>
+                            <th>部门名</th>
+                            <th>职责</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="detailContent">
+                        </tbody>
+                        <tfoot>
+                        <td colspan="3">
+                            <button id="detailAdd" href="#modalDetailEdit"
+                                    class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-primary">
+                                Add<i class="fa fa-plus"></i>
+                            </button>
+                        </td>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <footer class="panel-footer">
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <button class="btn btn-primary modal-dismiss">确定</button>
+                </div>
+            </div>
+        </footer>
+    </section>
+</div>
+<div id="modalDetailEdit" class="zoom-anim-dialog modal-block modal-block-sm modal-block-primary mfp-hide">
+    <section class="panel" >
+        <header class="panel-heading">
+            <h2 class="panel-title">编辑操作</h2>
+        </header>
+        <div class="panel-body">
+            <form class="form-horizontal">
+                <input type="hidden" id="departId"/>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">部门名</label>
+                    <div class="col-sm-8">
+                        <input type="text" id="DepartName" class="form-control"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">职责</label>
+                    <div class="col-sm-8">
+                        <input type="text" id="Duty" class="form-control"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <footer class="panel-footer">
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <button class="btn btn-primary modal-confirm detailSub">提交</button>
+                    <button class="btn btn-default modal-dismiss">取消</button>
+                </div>
+            </div>
+        </footer>
+    </section>
+</div>
+<script type="text/javascript" src="assets/javascripts/pages/organization.js"></script>

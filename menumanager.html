@@ -165,7 +165,7 @@
                 </footer>
             </section>
         </div>
-        <div id="modalChild" class="zoom-anim-dialog modal-block modal-block-sm modal-block-info mfp-hide">
+        <div id="modalDetail" class="zoom-anim-dialog modal-block modal-block-sm modal-block-info mfp-hide">
             <section class="panel">
                 <header class="panel-heading">
                     <h2 class="panel-title">操作明细</h2>
@@ -185,7 +185,7 @@
                                 </tbody>
                                 <tfoot>
                                 <td colspan="3">
-                                    <button id="actionAdd" href="#modalActionEdit"
+                                    <button id="detailAdd" href="#modalDetailEdit"
                                             class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-primary">
                                         Add<i class="fa fa-plus"></i>
                                     </button>
@@ -198,14 +198,13 @@
                 <footer class="panel-footer">
                     <div class="row">
                         <div class="col-md-12 text-right">
-                            <button class="btn btn-danger modal-confirm del">确认</button>
-                            <button class="btn btn-primary modal-dismiss">取消</button>
+                            <button class="btn btn-primary modal-dismiss">确定</button>
                         </div>
                     </div>
                 </footer>
             </section>
         </div>
-        <div id="modalActionEdit" class="zoom-anim-dialog modal-block modal-block-sm modal-block-primary mfp-hide">
+        <div id="modalDetailEdit" class="zoom-anim-dialog modal-block modal-block-sm modal-block-primary mfp-hide">
             <section class="panel" >
                 <header class="panel-heading">
                     <h2 class="panel-title">编辑操作</h2>
@@ -230,7 +229,7 @@
                 <footer class="panel-footer">
                     <div class="row">
                         <div class="col-md-12 text-right">
-                            <button class="btn btn-primary modal-confirm actionSub">提交</button>
+                            <button class="btn btn-primary modal-confirm detailSub">提交</button>
                             <button class="btn btn-default modal-dismiss">取消</button>
                         </div>
                     </div>
@@ -239,4 +238,4 @@
         </div>
     </div>
 </section>
-<script type="text/javascript" src="assets/javascripts/menumanager.js"></script>
+<script type="text/javascript" src="assets/javascripts/pages/menumanager.js"></script>

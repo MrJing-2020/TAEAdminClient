@@ -64,21 +64,23 @@ function RequestByAjax(param) {
 
 //初始化模态框
 function ModalInit(beforeOpen) {
-    $('.modal-with-zoom-anim.edit').magnificPopup({
-        type: 'inline',
-        fixedContentPos: false,
-        fixedBgPos: true,
-        overflowY: 'auto',
-        closeBtnInside: true,
-        preloader: false,
-        midClick: true,
-        removalDelay: 300,
-        mainClass: 'my-mfp-zoom-in',
-        modal: true,
-        callbacks: {
-            beforeOpen: beforeOpen.edit
-        }
-    });
+    if(beforeOpen.edit!=undefined){
+        $('.modal-with-zoom-anim.edit').magnificPopup({
+            type: 'inline',
+            fixedContentPos: false,
+            fixedBgPos: true,
+            overflowY: 'auto',
+            closeBtnInside: true,
+            preloader: false,
+            midClick: true,
+            removalDelay: 300,
+            mainClass: 'my-mfp-zoom-in',
+            modal: true,
+            callbacks: {
+                beforeOpen: beforeOpen.edit
+            }
+        });
+    };
     if(beforeOpen.allocation!=undefined){
         $('.modal-with-zoom-anim.allocation').magnificPopup({
             type: 'inline',
@@ -113,6 +115,23 @@ function ModalInit(beforeOpen) {
             }
         });
     };
+    if(beforeOpen.authority!=undefined){
+        $('.modal-with-zoom-anim.authority').magnificPopup({
+            type: 'inline',
+            fixedContentPos: false,
+            fixedBgPos: true,
+            overflowY: 'auto',
+            closeBtnInside: true,
+            preloader: false,
+            midClick: true,
+            removalDelay: 300,
+            mainClass: 'my-mfp-zoom-in',
+            modal: true,
+            callbacks: {
+                beforeOpen: beforeOpen.authority
+            }
+        });
+    };
     $('.modal-with-zoom-anim.other').magnificPopup({
         type: 'inline',
         fixedContentPos: false,
@@ -134,16 +153,30 @@ function ModalInit(beforeOpen) {
 function InitKey(ele) {
     $('#Id').val($(ele).attr('trkey'));
 };
+
 //提交modal数据
-function ModalDataSubmit(e, url, data) {
-    e.preventDefault();
+//参数格式
+// {
+//     e:e,
+//     url:subComDataUrl,
+//     data:{},
+//     callback:function () {},
+//     reload:false
+// }
+function ModalDataSubmit(param) {
+    param.e.preventDefault();
     RequestByAjax({
-        url: url,
+        url: param.url,
         type: 'POST',
-        data: data,
+        data: param.data,
         success: function () {
             $.magnificPopup.close();
-            LoadMainContent(window.location.hash.substring(1))
+            if(param.reload==true){
+                LoadMainContent(window.location.hash.substring(1))
+            }
+            if(param.callback!=null&&param.callback!=undefined){
+                param.callback();
+            }
         }
     });
 }

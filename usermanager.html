@@ -56,29 +56,52 @@
                         <div class="form-group mt-lg">
                             <label class="col-sm-2 control-label">用户名</label>
                             <div class="col-sm-9">
-                                <input type="text" id="UserName" name="UserName" class="form-control" placeholder=""
-                                       required/>
+                                <input type="text" id="UserName" name="UserName" class="form-control input-sm" />
                             </div>
                         </div>
                         <div class="form-group mt-lg">
                             <label class="col-sm-2 control-label">密码</label>
                             <div class="col-sm-9">
-                                <input type="password" id="Password" name="Password" class="form-control" placeholder=""
-                                       required/>
+                                <input type="password" id="Password" name="Password" class="form-control input-sm"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">姓名</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="RealName" name="RealName" class="form-control input-sm"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">公司</label>
+                            <div class="col-md-9">
+                                <select class="form-control input-sm" id="CompanyId" name="CompanyId">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">部门</label>
+                            <div class="col-md-9">
+                                <select class="form-control input-sm" id="DepartmentId" name="DepartmentId">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">职位</label>
+                            <div class="col-md-9">
+                                <select class="form-control input-sm" id="PositionId" name="PositionId">
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">邮箱</label>
                             <div class="col-sm-9">
-                                <input type="text" id="Email" name="Email" class="form-control" placeholder=""
-                                       required/>
+                                <input type="text" id="Email" name="Email" class="form-control input-sm"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">电话</label>
                             <div class="col-sm-9">
-                                <input type="text" id="PhoneNumber" name="PhoneNumber" class="form-control"
-                                       placeholder=""/>
+                                <input type="text" id="PhoneNumber" name="PhoneNumber" class="form-control input-sm"/>
                             </div>
                         </div>
                     </form>
@@ -155,125 +178,24 @@
                 </footer>
             </section>
         </div>
+        <div id="modalAuthority" class="zoom-anim-dialog modal-block modal-block-sm modal-block-success mfp-hide">
+            <section class="panel">
+                <header class="panel-heading">
+                    <h2 class="panel-title">用户当前权限</h2>
+                </header>
+                <div class="panel-body" id="treeContent">
+                    <div id="treeCheckbox">
+                    </div>
+                </div>
+                <footer class="panel-footer">
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <button class="btn btn-primary modal-dismiss">确定</button>
+                        </div>
+                    </div>
+                </footer>
+            </section>
+        </div>
     </div>
 </section>
-<script type="text/javascript">
-    (function ($) {
-        var listUrl='api/Admin/UserManager/AllUsers';
-        var detailUrl='api/Admin/UserManager/GetUserDetail';
-        var subDataUrl='api/Admin/UserManager/SubUserData';
-        var getRoleUrl='api/Admin/UserManager/GetRoleByUser';
-        var delUrl="";
-        var allocationUrlUrl="api/Admin/UserManager/RoleAllocationSub";
-        //打开弹窗前执行
-        var beforeOpen={
-            edit:function () {
-                RequestByAjax({
-                    url: detailUrl,
-                    type: 'GET',
-                    data: {id: $('#Id').val()},
-                    success: function (response) {
-                        $('#UserName').val(response.UserName);
-                        $('#Email').val(response.Email);
-                        $('#PhoneNumber').val(response.PhoneNumber);
-                        $('#Password').val('');
-                    },
-                    error: function () {
-                    }
-                });
-            },
-            allocation:function () {
-                $('#userIn').empty();
-                $("#userNotIn").empty();
-                RequestByAjax({
-                    url: getRoleUrl,
-                    type: 'GET',
-                    data: {id: $('#Id').val()},
-                    success: function (response) {
-                        var htmlIn="";
-                        for(var i=0;i<response.UserIn.length;i++){
-                            htmlIn+=[
-                                '<div class="checkbox-custom checkbox-primary">',
-                                '<input type="checkbox" checked="" id='+ response.UserIn[i].Id +' value='+ response.UserIn[i].Id +'>',
-                                '<label for='+response.UserIn[i].Id+'>'+response.UserIn[i].Name+'</label>',
-                                '</div>'
-                            ].join('')
-                        };
-
-                        $('#userIn').append(htmlIn);
-                        var htmlNotIn="";
-                        for(var i=0;i<response.UserNotIn.length;i++){
-                            htmlNotIn+=[
-                                '<div class="checkbox-custom checkbox-default">',
-                                '<input type="checkbox" id='+ response.UserNotIn[i].Id +' value='+ response.UserNotIn[i].Id +'>',
-                                '<label for='+response.UserNotIn[i].Id+'>'+response.UserNotIn[i].Name+'</label>',
-                                '</div>'
-                            ].join('')
-                        };
-
-                        $("#userNotIn").append(htmlNotIn);
-                    },
-                    error: function () {
-                    }
-                });
-            }
-        }
-        $('#addNewItem').on('click', function () {
-            $('#editModalForm').find('input').val("");
-        });
-        $('.modal-confirm.edit').on('click', function (e) {
-            ModalDataSubmit(e, subDataUrl, JSON.stringify($("#editModalForm").serializeNestedObject()));
-        });
-        $('.modal-confirm.allocation').on('click', function (e) {
-            var bindIds = new Array();
-            $('#allocationModalForm').find('input[type=checkbox]:checked').each(function () {
-                bindIds.push($(this).val());
-            })
-            var data={
-                Id:$('#Id').val(),
-                BindIds:bindIds
-            }
-            ModalDataSubmit(e,allocationUrlUrl,JSON.stringify(data));
-        });
-        $('.modal-confirm.del').on('click', function (e) {
-            ModalDataSubmit(e,delUrl,$('#Id').val());
-        });
-        function userManagerTableInit() {
-            TableInit({
-                table: '#datatable',
-                tableType: 'default',
-                ajax: {
-                    url: listUrl,
-                    type: 'POST',
-                },
-                search: '',
-                columns: [
-                    {
-                        data: "UserName"
-                    },
-                    {
-                        data: "Email"
-                    },
-                    {
-                        data: "PhoneNumber"
-                    },
-                    {
-                        className:'actions table-td',
-                        data:"Id",
-                        render : function(data,type, row, meta) {
-                            var trHtml='';
-                            trHtml += '<button href="#modalEdit" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim edit mb-xs mt-xs mr-xs btn btn-xs btn-primary"><i class="fa fa-edit"></i> </button>';
-                            trHtml += '<button href="#modalDelete" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-danger"><i class="fa fa-remove"></i> </button>';
-                            trHtml += '<button href="#modalAllocation" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim allocation mb-xs mt-xs mr-xs btn btn-xs btn-info"><i class="fa fa-user"></i> </button>';
-                            return trHtml;
-                        }
-                    }
-                ],
-                success: function () {
-                    ModalInit(beforeOpen)
-                }
-            });
-        };
-        userManagerTableInit();
-    }).apply(this, [jQuery])
-</script>
+<script type="text/javascript" src="assets/javascripts/pages/usermanager.js"></script>
