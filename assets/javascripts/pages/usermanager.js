@@ -52,11 +52,11 @@
         })
     }
     //填充职位下拉框数据
-    var posSelectInit=function (depId) {
+    var posSelectInit=function (comId) {
         RequestByAjax({
             url: getPosSelectUrl,
             type: 'GET',
-            data: {id:depId},
+            data: {id:comId},
             success: function (response) {
                 var optionsHtml='';
                 if(response.length>0){
@@ -85,6 +85,10 @@
                         $("#"+key).val(response[key]);
                     };
                     $('#Password').val('');
+                    depSelectInit($("#CompanyId").val());
+                    $("#DepartmentId").val(response[DepartmentId]);
+                    posSelectInit($("#CompanyId").val());
+                    $("#PositionId").val(response[PositionId]);
                 },
                 error: function () {
                 }
@@ -127,6 +131,7 @@
         },
         authority:function () {
             $('#treeContent').empty();
+            $('#treeContentData').empty();
             RequestByAjax({
                 url: authoritylUrl,
                 type: 'GET',
@@ -139,9 +144,19 @@
                                 'responsive': false
                             },
                             'check_callback' : true,
-                            'data':response
+                            'data':response.optionList
                         }
-                    })
+                    });
+                    $('#treeContentData').append('<div id="treeCheckboxData"></div>');
+                    $('#treeCheckboxData').jstree({
+                        'core' : {
+                            'themes' : {
+                                'responsive': false
+                            },
+                            'check_callback' : true,
+                            'data':response.dataList
+                        }
+                    });
                 },
                 error: function () {
                 }
@@ -155,9 +170,6 @@
     $("#CompanyId").change(function () {
         $("#DepartmentId").empty();
         depSelectInit($(this).val());
-        $("#PositionId").empty();
-    });
-    $("#DepartmentId").change(function () {
         posSelectInit($(this).val());
     });
     //弹框数据提交
@@ -207,10 +219,16 @@
                     data: "UserName"
                 },
                 {
-                    data: "Email"
+                    data: "RealName"
                 },
                 {
-                    data: "PhoneNumber"
+                    data: "CompanyName"
+                },
+                {
+                    data: "DepartName"
+                },
+                {
+                    data: "PositionName"
                 },
                 {
                     className:'actions table-td',

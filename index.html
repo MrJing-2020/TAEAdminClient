@@ -343,6 +343,68 @@
         </section>
     </div>
 </section>
+<!-- 弹出框 -->
+<!-- organization页面 职位弹窗,部门弹窗 -->
+<div id="modalPosDetail" style="display: none; overflow: auto;overflow-x:hidden;overflow-y:hidden">
+    <div class="row">
+        <div class="col-md-12">
+            <section class="panel">
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table mb-none">
+                            <thead>
+                            <tr>
+                                <th>职位</th>
+                                <th>职责</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbPosList">
+                            </tbody>
+                            <tfoot>
+                            <td colspan="4">
+                                <button id="posAdd" href="#modalPositionEdit"
+                                        class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-primary">
+                                    Add<i class="fa fa-plus"></i>
+                                </button>
+                            </td>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+<div id="modalDepDetial" style="display: none; overflow: auto;overflow-x:hidden;overflow-y:hidden">
+    <section class="panel">
+        <div class="panel-body">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table mb-none">
+                        <thead>
+                        <tr>
+                            <th>部门名</th>
+                            <th>职责</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tbDepContent">
+                        </tbody>
+                        <tfoot>
+                        <td colspan="3">
+                            <button id="detailAdd" href="#modalDepartEdit"
+                                    class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-primary">
+                                Add<i class="fa fa-plus"></i>
+                            </button>
+                        </td>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
 
 
 <script src="assets/vendor/modernizr/modernizr.js"></script>

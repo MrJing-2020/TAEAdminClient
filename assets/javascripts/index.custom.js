@@ -47,7 +47,7 @@ function RequestByAjax(param) {
             }else {
                 new PNotify({
                     title: '发生错误！',
-                    text: response.msg==undefined?"服务器错误":response.msg,
+                    text: response.responseText==undefined?"服务器错误":response.responseText,
                     type: 'error',
                     shadow: true,
                     stack: {
@@ -132,6 +132,23 @@ function ModalInit(beforeOpen) {
             }
         });
     };
+    if(beforeOpen.allocationData!=undefined){
+        $('.modal-with-zoom-anim.allocationData').magnificPopup({
+            type: 'inline',
+            fixedContentPos: false,
+            fixedBgPos: true,
+            overflowY: 'auto',
+            closeBtnInside: true,
+            preloader: false,
+            midClick: true,
+            removalDelay: 300,
+            mainClass: 'my-mfp-zoom-in',
+            modal: true,
+            callbacks: {
+                beforeOpen: beforeOpen.allocationData
+            }
+        });
+    }
     $('.modal-with-zoom-anim.other').magnificPopup({
         type: 'inline',
         fixedContentPos: false,

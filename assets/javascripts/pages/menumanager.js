@@ -55,6 +55,7 @@
     var iconSelect = function () {
         layer.open({
             type: 2,
+            title:"图标选择",
             area: ['700px', '530px'],
             fixed: false, //不固定
             maxmin: true,

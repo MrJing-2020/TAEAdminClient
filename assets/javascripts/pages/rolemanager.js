@@ -5,6 +5,9 @@
     var subDataUrl = 'api/Admin/RoleManager/SubRoleData';
     var getRoleAuthorityUrl='api/Admin/Authority/GetRoleAuthority';
     var updateAuthorityUrl='api/Admin/Authority/UpdateAuthority';
+    var getRoleDataAuthorityUrl='api/Admin/Authority/GetRoleDataAuthority';
+    var updateDataAuthorityUrl='api/Admin/Authority/UpdateDataAuthority';
+
     var delUrl = "";
     //打开弹窗前执行
     var beforeOpen = {
@@ -29,6 +32,29 @@
                 success:function (response) {
                     $('#treeContent').append('<div id="treeCheckbox"></div>');
                     $('#treeCheckbox').jstree({
+                        'core' : {
+                            'themes' : {
+                                'responsive': false
+                            },
+                            'check_callback' : true,
+                            'data':response
+                        },
+                        'plugins': ['checkbox']
+                    })
+                },
+                error: function () {
+                }
+            });
+        },
+        allocationData:function () {
+            $('#treeContentData').empty();
+            RequestByAjax({
+                url: getRoleDataAuthorityUrl,
+                type: 'GET',
+                data: {id: $('#Id').val()},
+                success:function (response) {
+                    $('#treeContentData').append('<div id="treeCheckboxData"></div>');
+                    $('#treeCheckboxData').jstree({
                         'core' : {
                             'themes' : {
                                 'responsive': false
@@ -69,6 +95,19 @@
             reload:true
         });
     });
+    $('.modal-confirm.allocationData').on('click', function (e) {
+        var data={
+            Id:$('#Id').val(),
+            BindIds:[]
+        }
+        data.BindIds= $('#treeCheckboxData').jstree('get_selected');
+        ModalDataSubmit({
+            e:e,
+            url:updateDataAuthorityUrl,
+            data:JSON.stringify(data),
+            reload:true
+        });
+    });
     $('.modal-confirm.del').on('click', function (e) {
         ModalDataSubmit({
             e:e,
@@ -98,7 +137,7 @@
                         trHtml += '<button href="#modalEdit" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim edit mb-xs mt-xs mr-xs btn btn-xs btn-primary"><i class="fa fa-edit"></i> </button>';
                         trHtml += '<button href="#modalDelete" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-danger"><i class="fa fa-remove"></i> </button>';
                         trHtml += '<button href="#modalAllocation" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim allocation mb-xs mt-xs mr-xs btn btn-xs btn-info"><i class="fa fa-user"></i> </button>';
-                        trHtml += '<button href="#modalAllocation" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim allocation mb-xs mt-xs mr-xs btn btn-xs btn-warning"><i class="fa fa-database"></i> </button>';
+                        trHtml += '<button href="#modalAllocationData" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim allocationData mb-xs mt-xs mr-xs btn btn-xs btn-warning"><i class="fa fa-database"></i> </button>';
                         return trHtml;
                     }
                 }

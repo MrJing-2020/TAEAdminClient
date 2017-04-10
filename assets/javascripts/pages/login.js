@@ -17,7 +17,7 @@ $(function(){
             dataType: 'json',
             success: function (response) {
                 $.cookie("token", response.access_token);
-                window.location.href="../../../index.html";
+                window.location.href="index.html";
             },
             error: function (response) {
                 $('body').trigger('loading-overlay:hide');
