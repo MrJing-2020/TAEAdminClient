@@ -79,7 +79,7 @@
             }
         })
     }
-    //职位弹窗
+    //layer弹窗
     var layerModal = function (title,ele) {
         layer.open({
             type: 1,

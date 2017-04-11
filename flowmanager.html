@@ -1,0 +1,121 @@
+<header class="page-header">
+    <h2>工作流管理</h2>
+
+    <div class="right-wrapper pull-right">
+        <ol class="breadcrumbs right-tagger">
+            <li>
+                <a href="index.html">
+                    <i class="fa fa-home"></i>
+                </a>
+            </li>
+            <li><span>工作流管理</span></li>
+        </ol>
+    </div>
+</header>
+<section class="panel">
+    <header class="panel-heading">
+        <div class="panel-actions">
+            <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
+            <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+        </div>
+
+        <h2 class="panel-title">工作流管理</h2>
+    </header>
+    <div class="panel-body">
+        <table class="table table-data table-bordered table-striped table-condensed table-hover mb-none" id="datatable">
+            <thead>
+            <tr>
+                <th>流程名</th>
+                <th>公司</th>
+                <th>部门</th>
+                <th>类型</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="tbodyContent">
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="5" class="tfoot-td">
+                    <button id="addNewItem" href="#modalEdit"
+                            class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-primary">
+                        Add<i class="fa fa-plus"></i>
+                    </button>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+        <!-- 弹出框 -->
+        <div id="modalEdit" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
+            <section class="panel">
+                <header class="panel-heading">
+                    <h2 class="panel-title">编辑工作流</h2>
+                </header>
+                <div class="panel-body">
+                    <form class="form-horizontal mb-lg" id="editModalForm" novalidate="novalidate">
+                        <input type="hidden" id="Id" name="Id" required/>
+                        <div class="form-group mt-lg">
+                            <label class="col-sm-2 control-label">流程名</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="Name" name="Name" class="form-control input-sm" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">公司</label>
+                            <div class="col-md-9">
+                                <select class="form-control input-sm" id="CompanyId" name="CompanyId">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">部门</label>
+                            <div class="col-md-9">
+                                <select class="form-control input-sm" id="DepartmentId" name="DepartmentId">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">类型</label>
+                            <div class="col-md-9">
+                                <select class="form-control input-sm" id="Type" name="Type">
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <footer class="panel-footer">
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <button class="btn btn-primary modal-confirm edit">提交</button>
+                            <button class="btn btn-default modal-dismiss">取消</button>
+                        </div>
+                    </div>
+                </footer>
+            </section>
+        </div>
+        <div id="modalDelete" class="zoom-anim-dialog modal-block modal-block-sm modal-block-danger mfp-hide">
+            <section class="panel">
+                <div class="panel-body">
+                    <div class="modal-wrapper">
+                        <div class="modal-icon">
+                            <i class="fa fa-times-circle"></i>
+                        </div>
+                        <div class="modal-text">
+                            <h4>提醒</h4>
+                            <p>删除后将不能恢复,您确认吗？</p>
+                        </div>
+                    </div>
+                </div>
+                <footer class="panel-footer">
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <button class="btn btn-danger modal-confirm del">确认</button>
+                            <button class="btn btn-primary modal-dismiss">取消</button>
+                        </div>
+                    </div>
+                </footer>
+            </section>
+        </div>
+    </div>
+</section>
+<script type="text/javascript" src="assets/javascripts/pages/flowmanager.js"></script>

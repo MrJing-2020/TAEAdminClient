@@ -226,7 +226,8 @@ jQuery.cumTheme = function() {
                         $nano
                             .one('bsTransitionEnd', updateNanoScroll)
                             .emulateTransitionEnd(150)
-                    } else {
+                    }
+                    else {
                         updateNanoScroll();
                     }
                 };

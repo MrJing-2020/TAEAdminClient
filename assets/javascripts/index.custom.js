@@ -28,10 +28,12 @@ function RequestByAjax(param) {
     $.ajax({
         beforeSend: function (xhr) {
             xhr.setRequestHeader('Authorization', 'Bearer ' + $.cookie("token"));
+            xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
         },
         url: apiServiceBaseUri + param.url,
         type: param.type,
-        cache : false,
+        //禁用缓存
+        // cache : false,
         data: param.data,
         dataType: 'json',
         contentType: "application/json;charset=utf-8",

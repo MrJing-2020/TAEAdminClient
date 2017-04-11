@@ -34,10 +34,6 @@ function TableInit(param) {
                         callback(returnData);
                         //执行回调函数
                         param.success();
-                        $('.modal-dismiss').click(function (e) {
-                            e.preventDefault();
-                            $.magnificPopup.close();
-                        });
                     } ,
                     error:param.ajax.error
                 })

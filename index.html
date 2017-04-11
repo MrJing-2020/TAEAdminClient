@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="assets/stylesheets/theme.css"/>
     <link rel="stylesheet" href="assets/stylesheets/skins/default.css"/>
     <link rel="stylesheet" href="assets/stylesheets/view.custom.css"/>
+
 </head>
 
 <body>
@@ -288,8 +289,8 @@
                                     <span>组织结构</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="index.html">
+                            <li id="menu-flowmanager">
+                                <a href="#flowmanager" class="a-route">
                                     <i class="fa fa-level-down" aria-hidden="true"></i>
                                     <span>工作流管理</span>
                                 </a>
@@ -362,7 +363,7 @@
                             <tbody id="tbPosList">
                             </tbody>
                             <tfoot>
-                            <td colspan="4">
+                                <td colspan="4">
                                 <button id="posAdd" href="#modalPositionEdit"
                                         class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-primary">
                                     Add<i class="fa fa-plus"></i>
@@ -399,6 +400,18 @@
                             </button>
                         </td>
                         </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<div id="modalFlowDetial" style="display: none; overflow: auto;overflow-x:hidden;overflow-y:hidden">
+    <section class="panel">
+        <div class="panel-body">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table mb-none">
                     </table>
                 </div>
             </div>

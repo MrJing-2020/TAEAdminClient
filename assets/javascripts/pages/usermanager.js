@@ -11,8 +11,8 @@
     var getDepSelectUrl='api/Admin/UserManager/DepSelectList';
     var getPosSelectUrl='api/Admin/UserManager/PosSelectList';
 
-    //填充公司下拉框数据
-    var comSelectInit=function () {
+    //填充公司下拉框数据(加载页面是执行一次即可)
+    var comSelectInit=function (callback) {
         RequestByAjax({
             url: getComSelectUrl,
             type: 'GET',
@@ -26,13 +26,17 @@
                 }
                 $("#CompanyId").empty();
                 $("#CompanyId").append(optionsHtml);
+                if(callback!=undefined&&callback!=null)
+                {
+                    callback();
+                }
             },
             error: function () {
             }
         })
     }
     //填充部门下拉框数据
-    var depSelectInit=function (comId) {
+    var depSelectInit=function (comId,callback) {
         RequestByAjax({
             url: getDepSelectUrl,
             type: 'GET',
@@ -46,13 +50,17 @@
                 }
                 $("#DepartmentId").empty();
                 $("#DepartmentId").append(optionsHtml);
+                if(callback!=undefined&&callback!=null)
+                {
+                    callback();
+                }
             },
             error: function () {
             }
         })
     }
     //填充职位下拉框数据
-    var posSelectInit=function (comId) {
+    var posSelectInit=function (comId,callback) {
         RequestByAjax({
             url: getPosSelectUrl,
             type: 'GET',
@@ -66,6 +74,10 @@
                 }
                 $("#PositionId").empty();
                 $("#PositionId").append(optionsHtml);
+                if(callback!=undefined&&callback!=null)
+                {
+                    callback();
+                }
             },
             error: function () {
             }
@@ -75,7 +87,6 @@
     //打开弹窗前执行
     var beforeOpen={
         edit:function () {
-            comSelectInit();
             RequestByAjax({
                 url: detailUrl,
                 type: 'GET',
@@ -85,10 +96,13 @@
                         $("#"+key).val(response[key]);
                     };
                     $('#Password').val('');
-                    depSelectInit($("#CompanyId").val());
-                    $("#DepartmentId").val(response[DepartmentId]);
-                    posSelectInit($("#CompanyId").val());
-                    $("#PositionId").val(response[PositionId]);
+                    $("#CompanyId").val(response.CompanyId);
+                    depSelectInit(response.CompanyId,function () {
+                        $("#DepartmentId").val(response.DepartmentId);
+                        posSelectInit($("#CompanyId").val(),function () {
+                            $("#PositionId").val(response.PositionId);
+                        });
+                    });
                 },
                 error: function () {
                 }
@@ -165,7 +179,6 @@
     }
     $('#addNewItem').on('click', function () {
         $('#editModalForm').find('input').val("");
-        comSelectInit();
     });
     $("#CompanyId").change(function () {
         $("#DepartmentId").empty();
@@ -205,6 +218,7 @@
             reload:true
         });
     });
+    //数据表初始化和填充数据
     function userManagerTableInit() {
         TableInit({
             table: '#datatable',
@@ -244,7 +258,8 @@
                 }
             ],
             success: function () {
-                ModalInit(beforeOpen)
+                ModalInit(beforeOpen);
+                comSelectInit();
             }
         });
     };
