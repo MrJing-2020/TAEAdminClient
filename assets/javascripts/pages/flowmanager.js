@@ -41,8 +41,6 @@
                         flowInfoInit();
                     });
                 }
-            },
-            error: function () {
             }
         })
     }
@@ -65,8 +63,12 @@
                     var num=parseInt(key)+1;
                     stepHtml+=[
                         '<li><div class="tm-box">',
+                        '<div class="flow-detial-item">',
                         '<p class="text-muted mb-none">'+num+'.'+DetailData.WorkFlowDetail[key].Name+'</p>',
                         '<p class="message">默认审核人：'+DetailData.WorkFlowDetail[key].DefualtAuditRealName+'</p>',
+                        '</div><div class="flow-detial-action">',
+                        '<span class="hvr-icon-bob"></span>',
+                        '<span href="#modalDetailEdit" class="hvr-icon-edit modal-with-zoom-anim detail"></span>',
                         '</div></li>'
                     ].join('');
                 };
@@ -194,6 +196,22 @@
             });
         },
         detail:function () {
+            RequestByAjax({
+                url: detailUrl,
+                type: 'GET',
+                data: {id: $('#flowId').val()},
+                success: function (response) {
+                    $('#FlowDetialId').val(response.Id);
+                    $('#FlowDetialName').val(response.Name);
+                    $('#Step').val(response.Step);
+                    $('#DefualtAuditUserId').val(response.DefualtAuditUserId);
+                    userSelectInit(function () {
+                        $('#DefualtAuditUserId').val(response.DefualtAuditUserId);
+                    });
+                },
+                error: function () {
+                }
+            });
             userSelectInit();
         }
     }
@@ -205,6 +223,18 @@
         $("#DepartmentId").empty();
         depSelectInit($(this).val());
     });
+    $('.tm-box').hover(
+        function () {
+        $(this).find('.flow-detial-action').css("visibility","visible")
+    },
+        function () {
+        $(this).find('.flow-detial-action').css("visibility","hidden")
+    }
+    )
+    $('#flowDetailAdd').click(function () {
+        $("#detailEditModalForm").find("input").val("");
+        userSelectInit();
+    })
     //弹框数据提交
     $('.modal-confirm.edit').on('click', function (e) {
         ModalDataSubmit({

@@ -74,8 +74,6 @@
                         comInfoInit();
                     });
                 }
-            },
-            error: function () {
             }
         })
     }
