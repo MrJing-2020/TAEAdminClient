@@ -189,13 +189,13 @@ function ModalDataSubmit(param) {
         type: 'POST',
         data: param.data,
         success: function () {
-            $.magnificPopup.close();
             if(param.reload==true){
                 LoadMainContent(window.location.hash.substring(1))
             }
             if(param.callback!=null&&param.callback!=undefined){
                 param.callback();
             }
+            $.magnificPopup.close();
         }
     });
 }

@@ -11,14 +11,14 @@
     var getDepSelectUrl='api/Admin/UserManager/DepSelectList';
     var getPosSelectUrl='api/Admin/UserManager/PosSelectList';
 
-    //填充公司下拉框数据(加载页面是执行一次即可)
+    //填充公司下拉框数据
     var comSelectInit=function (callback) {
         RequestByAjax({
             url: getComSelectUrl,
             type: 'GET',
             data: {},
             success: function (response) {
-                var optionsHtml='';
+                var optionsHtml='<option>请选择公司</option>';
                 if(response.length>0){
                     for(var key in response){
                         optionsHtml+='<option value='+response[key].Key+'>'+response[key].Value+'</option>';
@@ -96,13 +96,15 @@
                         $("#"+key).val(response[key]);
                     };
                     $('#Password').val('');
-                    $("#CompanyId").val(response.CompanyId);
-                    depSelectInit(response.CompanyId,function () {
-                        $("#DepartmentId").val(response.DepartmentId);
-                        posSelectInit($("#CompanyId").val(),function () {
-                            $("#PositionId").val(response.PositionId);
+                    comSelectInit(function () {
+                        $("#CompanyId").val(response.CompanyId);
+                        depSelectInit(response.CompanyId,function () {
+                            $("#DepartmentId").val(response.DepartmentId);
+                            posSelectInit($("#CompanyId").val(),function () {
+                                $("#PositionId").val(response.PositionId);
+                            });
                         });
-                    });
+                    })
                 },
                 error: function () {
                 }
@@ -179,6 +181,7 @@
     }
     $('#addNewItem').on('click', function () {
         $('#editModalForm').find('input').val("");
+        comSelectInit();
     });
     $("#CompanyId").change(function () {
         $("#DepartmentId").empty();
@@ -259,7 +262,6 @@
             ],
             success: function () {
                 ModalInit(beforeOpen);
-                comSelectInit();
             }
         });
     };

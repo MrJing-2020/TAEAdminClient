@@ -1,33 +1,114 @@
 ;
 (function ($) {
-    var listUrl='api/Admin/FlowManager/AllFlows';
+    var listUrl='api/Admin/FlowManager/AllFlowAndType';
     var detailUrl='api/Admin/FlowManager/GetFlow';
     var flowDetailUrl='api/Admin/FlowManager/GetFlowDetails';
     var subDataUrl='api/Admin/FlowManager/SubFlow';
+    var subDataDetailUrl='api/Admin/FlowManager/SubFlowDetail';
     var delUrl="";
     var getComSelectUrl='api/Admin/Organization/ComSelectList';
     var getDepSelectUrl='api/Admin/UserManager/DepSelectList';
+    var getTypeSelectUrl='api/Admin/FlowManager/FlowTypeSelectList';
+    var getUserSelectUrl='api/Admin/UserManager/UserSelectList';
 
-    //layer弹窗
-    var layerModal = function (title,ele) {
-        layer.open({
-            type: 1,
-            title:title,
-            area: '500px',
-            fixed: false, //不固定
-            maxmin: true,
-            zIndex:8888,
-            content: ele
-        });
+    //请求工作流树
+    var flowTreeInit=function () {
+        $('#treeContent').empty();
+        $('#treeContent').append('<div id="treeFlow"></div>');
+        RequestByAjax({
+            url: listUrl,
+            type: 'GET',
+            data: {},
+            success: function (response) {
+                if(response.length>0){
+                    for(var key in response){
+                        if(response[key].type=="root"){
+                            response[key].state={"opened": true};
+                        }
+                    };
+                    $('#treeFlow').jstree({
+                        'core' : {
+                            'themes' : {
+                                'responsive': false
+                            },
+                            'check_callback' : true,
+                            'data':response
+                        }
+                    });
+                    $("#treeFlow").bind("select_node.jstree", function (e, data) {
+                        var id=data.node.id;
+                        $('#Id').val(id);
+                        flowInfoInit();
+                    });
+                }
+            },
+            error: function () {
+            }
+        })
     }
-    //填充公司下拉框数据(加载页面是执行一次即可)
+    //初始化流程信息显示页信息
+    var flowInfoInit=function () {
+        RequestByAjax({
+            url: flowDetailUrl,
+            type: 'GET',
+            data: {id: $('#Id').val()},
+            success: function (DetailData) {
+                $("#flowId").val(DetailData.Id);
+                $('#flowCompanyId').val(DetailData.CompanyId);
+                $('#flowDepartmentId').val(DetailData.DepartmentId)
+                for(var key in DetailData){
+                    $("#show"+key).text(DetailData[key]);
+                }
+
+                var stepHtml="";
+                for(var key in DetailData.WorkFlowDetail){
+                    var num=parseInt(key)+1;
+                    stepHtml+=[
+                        '<li><div class="tm-box">',
+                        '<p class="text-muted mb-none">'+num+'.'+DetailData.WorkFlowDetail[key].Name+'</p>',
+                        '<p class="message">默认审核人：'+DetailData.WorkFlowDetail[key].DefualtAuditRealName+'</p>',
+                        '</div></li>'
+                    ].join('');
+                };
+                $('#workFlowDetails').empty();
+                $('#workFlowDetails').append(stepHtml);
+            },
+            error: function () {
+            }
+        })
+    }
+    //填充流程类型下拉框数据(加载页面时执行一次即可)
+    var typeSelectInit=function (callback) {
+        RequestByAjax({
+            url: getTypeSelectUrl,
+            type: 'GET',
+            data: {},
+            success: function (response) {
+                var optionsHtml='';
+                if(response.length>0){
+                    for(var key in response){
+                        optionsHtml+='<option value='+response[key].Key+'>'+response[key].Value+'</option>';
+                    }
+                }
+                $("#Type").empty();
+                $("#Type").append(optionsHtml);
+                if(callback!=undefined&&callback!=null)
+                {
+                    callback();
+                }
+            },
+            error: function () {
+            }
+        })
+    }
+    //填充公司下拉框数据(加载页面时执行一次即可)
     var comSelectInit=function (callback) {
         RequestByAjax({
             url: getComSelectUrl,
             type: 'GET',
             data: {},
             success: function (response) {
-                var optionsHtml='';
+                var optionsHtml='<option>请选择公司</option>';
                 if(response.length>0){
                     for(var key in response){
                         optionsHtml+='<option value='+response[key].Key+'>'+response[key].Value+'</option>';
@@ -68,40 +149,29 @@
             }
         })
     }
-    //填充流程明细弹窗数据
-    var flowDetailListInit=function () {
-        $("#tbPosList").empty();
+    //填充审核人下拉框数据(加载页面时执行一次即可)
+    var userSelectInit=function (callback) {
         RequestByAjax({
-            url: getPosUrl,
+            url: getUserSelectUrl,
             type: 'GET',
-            data: {id: $("#companyId").val()},
+            data: {id:$('#flowCompanyId').val()},
             success: function (response) {
-                if (response != undefined) {
-                    var trHtml="";
+                var optionsHtml='';
+                if(response.length>0){
                     for(var key in response){
-                        trHtml += [
-                            '<tr><td>' + response[key].PositionName + '</td>',
-                            '<td>' + response[key].Duty + '</td>',
-                            '<td class="actions">',
-                            '<a href="#modalPositionEdit" id=' + response[key].Id + ' class="modal-with-zoom-anim other posEdit"><i class="fa fa-pencil"></i></a>',
-                            '<a href="" id=' + response[key].Id + ' class="delete-row actionDel"><i class="fa fa-trash-o"></i></a>',
-                            '</td></tr>'
-                        ].join('');
+                        optionsHtml+='<option value='+response[key].Key+'>'+response[key].Value+'</option>';
                     }
-                    $("#tbPosList").append(trHtml);
-                    ModalInit(beforeOpen);
-                    $('.posEdit').click(function () {
-                        $("#positionId").val($(this).attr("id"))
-                        $("#PositionDuty").val($(this).parent().prev().text());
-                        $("#PositionName").val($(this).parent().prev().prev().text());
-                    })
-                }else {
-                    $("#tbPosList").append('<tr><td colspan="3">没有任何内容！</td></tr>>');
+                }
+                $("#DefualtAuditUserId").empty();
+                $("#DefualtAuditUserId").append(optionsHtml);
+                if(callback!=undefined&&callback!=null)
+                {
+                    callback();
                 }
             },
             error: function () {
             }
-        });
+        })
     }
     //打开弹窗前执行
     var beforeOpen={
@@ -109,7 +179,7 @@
             RequestByAjax({
                 url: detailUrl,
                 type: 'GET',
-                data: {id: $('#Id').val()},
+                data: {id: $('#flowId').val()},
                 success: function (response) {
                     for(var key in response){
                         $("#"+key).val(response[key]);
@@ -122,14 +192,14 @@
                 error: function () {
                 }
             });
+        },
+        detail:function () {
+            userSelectInit();
         }
     }
+
     $('#addNewItem').on('click', function () {
         $('#editModalForm').find('input').val("");
-    });
-    $('#flowDetail').click(function () {
-        layerModal("流程明细",$("#modalFlowDetial"));
-        flowDetailListInit();
     });
     $("#CompanyId").change(function () {
         $("#DepartmentId").empty();
@@ -141,7 +211,31 @@
             e:e,
             url:subDataUrl,
             data:JSON.stringify($("#editModalForm").serializeNestedObject()),
-            reload:true
+            reload:false,
+            callback:function () {
+                flowInfoInit();
+                flowTreeInit();
+            }
+        });
+    });
+    $('.modal-confirm.detailEdit').on('click', function (e) {
+        var data={
+            Id:$('#FlowDetialId').val(),
+            WorkFlowId:$('#flowId').val(),
+            Name:$('#FlowDetialName').val(),
+            Step:$('#Step').val(),
+            CompanyId:$('#flowCompanyId').val(),
+            DepartmentId:$('#flowDepartmentId').val(),
+            DefualtAuditUserId:$('#DefualtAuditUserId').val()
+        };
+        ModalDataSubmit({
+            e:e,
+            url:subDataDetailUrl,
+            data:JSON.stringify(data),
+            reload:false,
+            callback:function () {
+                flowInfoInit();
+            }
         });
     });
     $('.modal-confirm.del').on('click', function (e) {
@@ -152,52 +246,13 @@
             reload:true
         });
     });
-    //数据表初始化和填充数据
-    function userManagerTableInit() {
-        TableInit({
-            table: '#datatable',
-            tableType: 'default',
-            ajax: {
-                url: listUrl,
-                type: 'POST',
-            },
-            search: '',
-            columns: [
-                {
-                    data: "Name"
-                },
-                {
-                    data: "CompanyName"
-                },
-                {
-                    data: "DepartName"
-                },
-                {
-                    data: "TypeName"
-                },
-                {
-                    className:'actions table-td',
-                    data:"Id",
-                    render : function(data,type, row, meta) {
-                        var trHtml='';
-                        trHtml += '<button href="#modalEdit" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim edit mb-xs mt-xs mr-xs btn btn-xs btn-primary"><i class="fa fa-edit"></i> </button>';
-                        trHtml += '<button href="#modalDelete" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-danger"><i class="fa fa-remove"></i> </button>';
-                        trHtml += '<button href="javascript:void(0);" id="flowDetail" trkey="' + data + '" class="mb-xs mt-xs mr-xs btn btn-xs btn-info"><i class="fa fa-eye"></i> </button>';
-                        return trHtml;
-                    }
-                }
-            ],
-            success: function () {
-                ModalInit(beforeOpen);
-                comSelectInit(function () {
-                    depSelectInit($("#CompanyId").val());
-                });
-                $('#flowDetail').click(function () {
-                    layerModal("流程明细",$("#modalFlowDetial"));
-                    // flowDetailListInit();
-                });
-            }
-        });
-    };
-    userManagerTableInit();
+    //初始化弹出框
+    ModalInit(beforeOpen);
+    //请求组织结构树
+    flowTreeInit();
+    //填充流程类型下拉框数据
+    typeSelectInit();
+    //填充公司下拉框数据
+    comSelectInit();
 }).apply(this, [jQuery]);
+

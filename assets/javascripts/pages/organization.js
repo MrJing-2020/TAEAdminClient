@@ -163,7 +163,6 @@
     //打开弹窗前执行
     var beforeOpen = {
         edit: function () {
-            comSelectInit();
             RequestByAjax({
                 url: getComDetailUrl,
                 type: 'GET',
@@ -181,7 +180,6 @@
     //新增公司弹窗打开时执行
     $('#addNewItem').on('click', function () {
         $('#editModalForm').find('input,textarea').val("");
-        comSelectInit();
     });
     //提交编辑和新增表单
     $('.modal-confirm.edit').on('click', function (e) {
@@ -244,6 +242,8 @@
     });
     //初始化弹出框
     ModalInit(beforeOpen);
+    //填充公司下拉框数据
+    comSelectInit();
     //请求组织结构树
     orgTreeInit();
 }).apply(this, [jQuery]);
