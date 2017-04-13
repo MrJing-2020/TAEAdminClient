@@ -87,28 +87,6 @@
                                                 <h3 class="h5 text-uppercase">流程开始</h3>
                                             </div>
                                             <ol class="tm-items" id="workFlowDetails">
-                                                <li>
-                                                    <div class="tm-box">
-                                                        <div class="flow-detial-item">
-                                                            <p class="text-muted mb-none">7 months ago.</p>
-                                                            <p>
-                                                                It's awesome when we find a good solution for our projects
-                                                            </p>
-                                                        </div>
-                                                        <div class="flow-detial-action">
-                                                            <span class="hvr-icon-bob"></span>
-                                                            <span href="#modalDetailEdit" class="hvr-icon-edit modal-with-zoom-anim detail"></span>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="tm-box">
-                                                        <p class="text-muted mb-none">7 months ago.</p>
-                                                        <p>
-                                                            What is your biggest developer pain point?
-                                                        </p>
-                                                    </div>
-                                                </li>
                                             </ol>
                                             <div class="tm-title">
                                                 <h3 class="h5 text-uppercase">流程结束</h3>
@@ -128,6 +106,7 @@
             </div>
         </section>
     </div>
+    <input type="hidden" id="FlowDetialId" name="FlowDetialId"/>
 </div>
 
 <!-- 弹出框 -->
@@ -185,7 +164,7 @@
         </header>
         <div class="panel-body">
             <form class="form-horizontal mb-lg" id="detailEditModalForm" novalidate="novalidate">
-                <input type="hidden" id="FlowDetialId" name="FlowDetialId"/>
+
                 <div class="form-group mt-lg">
                     <label class="col-sm-2 control-label">步骤名</label>
                     <div class="col-sm-9">

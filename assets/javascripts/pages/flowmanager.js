@@ -2,7 +2,8 @@
 (function ($) {
     var listUrl='api/Admin/FlowManager/AllFlowAndType';
     var detailUrl='api/Admin/FlowManager/GetFlow';
-    var flowDetailUrl='api/Admin/FlowManager/GetFlowDetails';
+    var flowAndDetailUrl='api/Admin/FlowManager/GetFlowAndDetails';
+    var flowDetailUrl='api/Admin/FlowManager/GetFlowDetail';
     var subDataUrl='api/Admin/FlowManager/SubFlow';
     var subDataDetailUrl='api/Admin/FlowManager/SubFlowDetail';
     var delUrl="";
@@ -11,6 +12,29 @@
     var getTypeSelectUrl='api/Admin/FlowManager/FlowTypeSelectList';
     var getUserSelectUrl='api/Admin/UserManager/UserSelectList';
 
+    var bindSubDetailEvent=function () {
+        $('.modal-confirm.detailEdit').unbind("click");
+        $('.modal-confirm.detailEdit').on('click', function (e) {
+            var data={
+                Id:$('#FlowDetialId').val(),
+                WorkFlowId:$('#flowId').val(),
+                Name:$('#FlowDetialName').val(),
+                Step:$('#Step').val(),
+                CompanyId:$('#flowCompanyId').val(),
+                DepartmentId:$('#flowDepartmentId').val(),
+                DefualtAuditUserId:$('#DefualtAuditUserId').val()
+            };
+            ModalDataSubmit({
+                e:e,
+                url:subDataDetailUrl,
+                data:JSON.stringify(data),
+                reload:false,
+                callback:function () {
+                    flowInfoInit();
+                }
+            });
+        });
+    }
     //请求工作流树
     var flowTreeInit=function () {
         $('#treeContent').empty();
@@ -47,7 +71,7 @@
     //初始化流程信息显示页信息
     var flowInfoInit=function () {
         RequestByAjax({
-            url: flowDetailUrl,
+            url: flowAndDetailUrl,
             type: 'GET',
             data: {id: $('#Id').val()},
             success: function (DetailData) {
@@ -57,7 +81,6 @@
                 for(var key in DetailData){
                     $("#show"+key).text(DetailData[key]);
                 }
-
                 var stepHtml="";
                 for(var key in DetailData.WorkFlowDetail){
                     var num=parseInt(key)+1;
@@ -68,14 +91,23 @@
                         '<p class="message">默认审核人：'+DetailData.WorkFlowDetail[key].DefualtAuditRealName+'</p>',
                         '</div><div class="flow-detial-action">',
                         '<span class="hvr-icon-bob"></span>',
-                        '<span href="#modalDetailEdit" class="hvr-icon-edit modal-with-zoom-anim detail"></span>',
+                        '<span href="#modalDetailEdit" onclick="initFlowDetailId(this)" id='+DetailData.WorkFlowDetail[key].Id+' class="hvr-icon-edit modal-with-zoom-anim detail"></span>',
                         '</div></li>'
                     ].join('');
                 };
                 $('#workFlowDetails').empty();
                 $('#workFlowDetails').append(stepHtml);
-            },
-            error: function () {
+                //初始化弹出框
+                ModalInit(beforeOpen);
+                $('.tm-box').hover(
+                    function () {
+                        $('.flow-detial-action').css("visibility","hidden");
+                        $(this).find('.flow-detial-action').css("visibility","visible");
+                    },
+                    function () {
+                        $('.flow-detial-action').css("visibility","hidden")
+                    }
+                );
             }
         })
     }
@@ -190,16 +222,15 @@
                     depSelectInit(response.CompanyId,function () {
                         $('#DepartmentId').val(response.DepartmentId);
                     });
-                },
-                error: function () {
                 }
             });
         },
         detail:function () {
+            var id=$('#FlowDetialId').val();
             RequestByAjax({
-                url: detailUrl,
+                url: flowDetailUrl,
                 type: 'GET',
-                data: {id: $('#flowId').val()},
+                data: {id: id},
                 success: function (response) {
                     $('#FlowDetialId').val(response.Id);
                     $('#FlowDetialName').val(response.Name);
@@ -208,11 +239,8 @@
                     userSelectInit(function () {
                         $('#DefualtAuditUserId').val(response.DefualtAuditUserId);
                     });
-                },
-                error: function () {
                 }
             });
-            userSelectInit();
         }
     }
 
@@ -223,18 +251,10 @@
         $("#DepartmentId").empty();
         depSelectInit($(this).val());
     });
-    $('.tm-box').hover(
-        function () {
-        $(this).find('.flow-detial-action').css("visibility","visible")
-    },
-        function () {
-        $(this).find('.flow-detial-action').css("visibility","hidden")
-    }
-    )
     $('#flowDetailAdd').click(function () {
         $("#detailEditModalForm").find("input").val("");
         userSelectInit();
-    })
+    });
     //弹框数据提交
     $('.modal-confirm.edit').on('click', function (e) {
         ModalDataSubmit({
@@ -248,26 +268,6 @@
             }
         });
     });
-    $('.modal-confirm.detailEdit').on('click', function (e) {
-        var data={
-            Id:$('#FlowDetialId').val(),
-            WorkFlowId:$('#flowId').val(),
-            Name:$('#FlowDetialName').val(),
-            Step:$('#Step').val(),
-            CompanyId:$('#flowCompanyId').val(),
-            DepartmentId:$('#flowDepartmentId').val(),
-            DefualtAuditUserId:$('#DefualtAuditUserId').val()
-        };
-        ModalDataSubmit({
-            e:e,
-            url:subDataDetailUrl,
-            data:JSON.stringify(data),
-            reload:false,
-            callback:function () {
-                flowInfoInit();
-            }
-        });
-    });
     $('.modal-confirm.del').on('click', function (e) {
         ModalDataSubmit({
             e:e,
@@ -278,6 +278,7 @@
     });
     //初始化弹出框
     ModalInit(beforeOpen);
+    bindSubDetailEvent();
     //请求组织结构树
     flowTreeInit();
     //填充流程类型下拉框数据

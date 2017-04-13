@@ -66,6 +66,22 @@ function RequestByAjax(param) {
 
 //初始化模态框
 function ModalInit(beforeOpen) {
+    $('.modal-with-zoom-anim.other').magnificPopup({
+        type: 'inline',
+        fixedContentPos: false,
+        fixedBgPos: true,
+        overflowY: 'auto',
+        closeBtnInside: true,
+        preloader: false,
+        midClick: true,
+        removalDelay: 300,
+        mainClass: 'my-mfp-zoom-in',
+        modal: true
+    });
+    $('.modal-dismiss').click(function (e) {
+        e.preventDefault();
+        $.magnificPopup.close();
+    });
     if(beforeOpen.edit!=undefined){
         $('.modal-with-zoom-anim.edit').magnificPopup({
             type: 'inline',
@@ -151,27 +167,14 @@ function ModalInit(beforeOpen) {
             }
         });
     }
-    $('.modal-with-zoom-anim.other').magnificPopup({
-        type: 'inline',
-        fixedContentPos: false,
-        fixedBgPos: true,
-        overflowY: 'auto',
-        closeBtnInside: true,
-        preloader: false,
-        midClick: true,
-        removalDelay: 300,
-        mainClass: 'my-mfp-zoom-in',
-        modal: true
-    });
-    $('.modal-dismiss').click(function (e) {
-        e.preventDefault();
-        $.magnificPopup.close();
-    });
 };
 
 function InitKey(ele) {
     $('#Id').val($(ele).attr('trkey'));
 };
+function initFlowDetailId (ele) {
+    $('#FlowDetialId').val($(ele).attr('id'));
+}
 
 //提交modal数据
 //参数格式
