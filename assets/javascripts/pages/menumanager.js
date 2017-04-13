@@ -133,12 +133,17 @@
         }
     };
     $('#addNewItem').on('click', function () {
+        $("#Id").val("");
         $('#editModalForm').find('input[type="text"]').val("");
         $(".iconShowContent i").attr("class","");
         $("#NotParent").get(0).checked=true;
         bindFormEleEvent();
         getParMenus();
     });
+    $('#detailAdd').on('click',function () {
+        $("#modalDetailEditForm input").val("")
+        $("#actionId").val("");
+    })
     //弹出框数据提交
     $('.modal-confirm.edit').on('click', function (e) {
         ModalDataSubmit({
