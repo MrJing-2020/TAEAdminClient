@@ -1,5 +1,5 @@
 ;
-var apiServiceBaseUri = 'http://localhost:8015/';
+var apiServiceBaseUri = 'http://192.168.1.5/';
 $(function(){
     jQuery.cumTheme();
     jQuery.cumThemeInit();

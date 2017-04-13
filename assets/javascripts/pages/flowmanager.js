@@ -12,29 +12,6 @@
     var getTypeSelectUrl='api/Admin/FlowManager/FlowTypeSelectList';
     var getUserSelectUrl='api/Admin/UserManager/UserSelectList';
 
-    var bindSubDetailEvent=function () {
-        $('.modal-confirm.detailEdit').unbind("click");
-        $('.modal-confirm.detailEdit').on('click', function (e) {
-            var data={
-                Id:$('#FlowDetialId').val(),
-                WorkFlowId:$('#flowId').val(),
-                Name:$('#FlowDetialName').val(),
-                Step:$('#Step').val(),
-                CompanyId:$('#flowCompanyId').val(),
-                DepartmentId:$('#flowDepartmentId').val(),
-                DefualtAuditUserId:$('#DefualtAuditUserId').val()
-            };
-            ModalDataSubmit({
-                e:e,
-                url:subDataDetailUrl,
-                data:JSON.stringify(data),
-                reload:false,
-                callback:function () {
-                    flowInfoInit();
-                }
-            });
-        });
-    }
     //请求工作流树
     var flowTreeInit=function () {
         $('#treeContent').empty();
@@ -183,7 +160,7 @@
             }
         })
     }
-    //填充审核人下拉框数据(加载页面时执行一次即可)
+    //填充审核人下拉框数据
     var userSelectInit=function (callback) {
         RequestByAjax({
             url: getUserSelectUrl,
@@ -278,12 +255,29 @@
     });
     //初始化弹出框
     ModalInit(beforeOpen);
-    bindSubDetailEvent();
     //请求组织结构树
     flowTreeInit();
     //填充流程类型下拉框数据
     typeSelectInit();
     //填充公司下拉框数据
     comSelectInit();
+    $(document).on('click', '.modal-confirm.detailEdit', function (e) {
+        var data={
+            Id:$('#FlowDetialId').val(),
+            WorkFlowId:$('#flowId').val(),
+            Name:$('#FlowDetialName').val(),
+            Step:$('#Step').val(),
+            CompanyId:$('#flowCompanyId').val(),
+            DepartmentId:$('#flowDepartmentId').val(),
+            DefualtAuditUserId:$('#DefualtAuditUserId').val()
+        };
+        ModalDataSubmit({
+            e:e,
+            url:subDataDetailUrl,
+            data:JSON.stringify(data),
+            reload:false,
+            callback: flowInfoInit
+        });
+    });
 }).apply(this, [jQuery]);
 

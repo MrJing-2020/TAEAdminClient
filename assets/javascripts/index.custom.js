@@ -1,6 +1,6 @@
 ;
 //全局变量 服务地址
-var apiServiceBaseUri = 'http://192.168.3.154:8888/';
+var apiServiceBaseUri = 'http://192.168.1.5/';
 
 //用jquery实现简单路由
 function LoadMainContent(viewName) {
@@ -77,10 +77,6 @@ function ModalInit(beforeOpen) {
         removalDelay: 300,
         mainClass: 'my-mfp-zoom-in',
         modal: true
-    });
-    $('.modal-dismiss').click(function (e) {
-        e.preventDefault();
-        $.magnificPopup.close();
     });
     if(beforeOpen.edit!=undefined){
         $('.modal-with-zoom-anim.edit').magnificPopup({
@@ -211,5 +207,9 @@ $(function () {
     }
     $('.a-route').click(function () {
         LoadMainContent($(this).attr("href").substring(1));
+    });
+    $(document).on('click', '.modal-dismiss', function (e) {
+        e.preventDefault();
+        $.magnificPopup.close();
     });
 });
