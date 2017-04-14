@@ -1,6 +1,6 @@
 ;
 //全局变量 服务地址
-var apiServiceBaseUri = 'http://192.168.3.154:8888/';
+var apiServiceBaseUri = 'http://localhost:8015/';
 
 //用jquery实现简单路由
 function LoadMainContent(viewName) {

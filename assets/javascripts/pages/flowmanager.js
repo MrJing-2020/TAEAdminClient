@@ -12,82 +12,6 @@
     var getTypeSelectUrl='api/Admin/FlowManager/FlowTypeSelectList';
     var getUserSelectUrl='api/Admin/UserManager/UserSelectList';
 
-    //请求工作流树
-    var flowTreeInit=function () {
-        $('#treeContent').empty();
-        $('#treeContent').append('<div id="treeFlow"></div>');
-        RequestByAjax({
-            url: listUrl,
-            type: 'GET',
-            data: {},
-            success: function (response) {
-                if(response.length>0){
-                    for(var key in response){
-                        if(response[key].type=="root"){
-                            response[key].state={"opened": true};
-                        }
-                    };
-                    $('#treeFlow').jstree({
-                        'core' : {
-                            'themes' : {
-                                'responsive': false
-                            },
-                            'check_callback' : true,
-                            'data':response
-                        }
-                    });
-                    $("#treeFlow").bind("select_node.jstree", function (e, data) {
-                        var id=data.node.id;
-                        $('#Id').val(id);
-                        flowInfoInit();
-                    });
-                }
-            }
-        })
-    }
-    //初始化流程信息显示页信息
-    var flowInfoInit=function () {
-        RequestByAjax({
-            url: flowAndDetailUrl,
-            type: 'GET',
-            data: {id: $('#Id').val()},
-            success: function (DetailData) {
-                $("#flowId").val(DetailData.Id);
-                $('#flowCompanyId').val(DetailData.CompanyId);
-                $('#flowDepartmentId').val(DetailData.DepartmentId)
-                for(var key in DetailData){
-                    $("#show"+key).text(DetailData[key]);
-                }
-                var stepHtml="";
-                for(var key in DetailData.WorkFlowDetail){
-                    var num=parseInt(key)+1;
-                    stepHtml+=[
-                        '<li><div class="tm-box">',
-                        '<div class="flow-detial-item">',
-                        '<p class="text-muted mb-none">'+num+'.'+DetailData.WorkFlowDetail[key].Name+'</p>',
-                        '<p class="message">默认审核人：'+DetailData.WorkFlowDetail[key].DefualtAuditRealName+'</p>',
-                        '</div><div class="flow-detial-action">',
-                        '<span class="hvr-icon-bob"></span>',
-                        '<span href="#modalDetailEdit" onclick="initFlowDetailId(this)" id='+DetailData.WorkFlowDetail[key].Id+' class="hvr-icon-edit modal-with-zoom-anim detail"></span>',
-                        '</div></li>'
-                    ].join('');
-                };
-                $('#workFlowDetails').empty();
-                $('#workFlowDetails').append(stepHtml);
-                //初始化弹出框
-                ModalInit(beforeOpen);
-                $('.tm-box').hover(
-                    function () {
-                        $('.flow-detial-action').css("visibility","hidden");
-                        $(this).find('.flow-detial-action').css("visibility","visible");
-                    },
-                    function () {
-                        $('.flow-detial-action').css("visibility","hidden")
-                    }
-                );
-            }
-        })
-    }
     //填充流程类型下拉框数据(加载页面时执行一次即可)
     var typeSelectInit=function (callback) {
         RequestByAjax({
@@ -133,6 +57,86 @@
                 }
             },
             error: function () {
+            }
+        })
+    }
+    //请求工作流树
+    var flowTreeInit=function () {
+        $('#treeContent').empty();
+        $('#treeContent').append('<div id="treeFlow"></div>');
+        RequestByAjax({
+            url: listUrl,
+            type: 'GET',
+            data: {},
+            success: function (response) {
+                if(response.length>0){
+                    for(var key in response){
+                        if(response[key].type=="root"){
+                            response[key].state={"opened": true};
+                        }
+                    };
+                    $('#treeFlow').jstree({
+                        'core' : {
+                            'themes' : {
+                                'responsive': false
+                            },
+                            'check_callback' : true,
+                            'data':response
+                        }
+                    });
+                    $("#treeFlow").bind("select_node.jstree", function (e, data) {
+                        var id=data.node.id;
+                        $('#Id').val(id);
+                        flowInfoInit();
+                    });
+                }
+                //填充流程类型下拉框数据
+                typeSelectInit();
+                //填充公司下拉框数据
+                comSelectInit();
+            }
+        })
+    }
+    //初始化流程信息显示页信息
+    var flowInfoInit=function () {
+        RequestByAjax({
+            url: flowAndDetailUrl,
+            type: 'GET',
+            data: {id: $('#Id').val()},
+            success: function (DetailData) {
+                $("#flowId").val(DetailData.Id);
+                $('#flowCompanyId').val(DetailData.CompanyId);
+                $('#flowDepartmentId').val(DetailData.DepartmentId)
+                for(var key in DetailData){
+                    $("#show"+key).text(DetailData[key]);
+                }
+                var stepHtml="";
+                for(var key in DetailData.WorkFlowDetail){
+                    var num=parseInt(key)+1;
+                    stepHtml+=[
+                        '<li><div class="tm-box">',
+                        '<div class="flow-detial-item">',
+                        '<p class="text-muted mb-none">'+num+'.'+DetailData.WorkFlowDetail[key].Name+'</p>',
+                        '<p class="message">默认审核人：'+DetailData.WorkFlowDetail[key].DefualtAuditRealName+'</p>',
+                        '</div><div class="flow-detial-action">',
+                        '<span class="hvr-icon-bob"></span>',
+                        '<span href="#modalDetailEdit" onclick="initFlowDetailId(this)" id='+DetailData.WorkFlowDetail[key].Id+' class="hvr-icon-edit modal-with-zoom-anim detail"></span>',
+                        '</div></li>'
+                    ].join('');
+                };
+                $('#workFlowDetails').empty();
+                $('#workFlowDetails').append(stepHtml);
+                //初始化弹出框
+                ModalInit(beforeOpen);
+                $('.tm-box').hover(
+                    function () {
+                        $('.flow-detial-action').css("visibility","hidden");
+                        $(this).find('.flow-detial-action').css("visibility","visible");
+                    },
+                    function () {
+                        $('.flow-detial-action').css("visibility","hidden")
+                    }
+                );
             }
         })
     }
@@ -229,6 +233,7 @@
         depSelectInit($(this).val());
     });
     $('#flowDetailAdd').click(function () {
+        $('#FlowDetialId').val("");
         $("#detailEditModalForm").find("input").val("");
         userSelectInit();
     });
@@ -257,10 +262,6 @@
     ModalInit(beforeOpen);
     //请求组织结构树
     flowTreeInit();
-    //填充流程类型下拉框数据
-    typeSelectInit();
-    //填充公司下拉框数据
-    comSelectInit();
     $(document).on('click', '.modal-confirm.detailEdit', function (e) {
         var data={
             Id:$('#FlowDetialId').val(),

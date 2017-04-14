@@ -74,6 +74,8 @@
                         comInfoInit();
                     });
                 }
+                //填充公司下拉框数据
+                comSelectInit();
             }
         })
     }
@@ -240,8 +242,6 @@
     });
     //初始化弹出框
     ModalInit(beforeOpen);
-    //填充公司下拉框数据
-    comSelectInit();
     //请求组织结构树
     orgTreeInit();
 }).apply(this, [jQuery]);
