@@ -164,18 +164,45 @@
             }
         })
     }
+    //填充步骤弹窗中部门下拉框数据
+    var StepDepSelectInit = function (callback) {
+        RequestByAjax({
+            url: getDepSelectUrl,
+            type: 'GET',
+            data: { id: $("#flowCompanyId").val() },
+            success: function (response) {
+                var optionsHtml = '<option>请选择部门</option>';
+                if (response.length > 0) {
+                    for (var key in response) {
+                        optionsHtml += '<option value=' + response[key].Key + '>' + response[key].Value + '</option>';
+                    }
+                }
+                $("#StepDep").empty();
+                $("#StepDep").append(optionsHtml);
+                if (callback != undefined && callback != null) {
+                    callback();
+                }
+            },
+            error: function () {
+            }
+        })
+    }
     //填充审核人下拉框数据
-    var userSelectInit=function (callback) {
+    var userSelectInit = function (DepId,callback) {
         RequestByAjax({
             url: getUserSelectUrl,
             type: 'GET',
-            data: {id:$('#flowCompanyId').val()},
+            data: { id: DepId },
             success: function (response) {
                 var optionsHtml='';
                 if(response.length>0){
                     for(var key in response){
                         optionsHtml+='<option value='+response[key].Key+'>'+response[key].Value+'</option>';
                     }
+                }
+                if (optionsHtml == '')
+                {
+                    optionsHtml += '<option></option>';
                 }
                 $("#DefualtAuditUserId").empty();
                 $("#DefualtAuditUserId").append(optionsHtml);
@@ -186,6 +213,55 @@
             },
             error: function () {
             }
+        })
+    }
+    //次序列表展示
+    var aa = "";
+    var stepData = function (callback) {
+        RequestByAjax({
+            url: flowAndDetailUrl,
+            type: 'GET',
+            data: { id: $('#Id').val() },
+            success: function (DetailData) {
+                if (DetailData.WorkFlowDetail == "")
+                {
+                    $("#Ts").text("(该步骤默认为第一步)");
+                    $("#StepValue").val("1");
+                }
+                else
+                {
+                    $("#Ts").text("(步骤将添加于选中步骤的下方)");
+                    var stepHtml = "";
+                    for (var key in DetailData.WorkFlowDetail) {
+                        var WorkFlowID = DetailData.WorkFlowDetail[key].Step;
+                        var num = parseInt(key) + 1;
+                        stepHtml += [
+                            '<li class="' + WorkFlowID + '" ><div class="tm-box">',
+                            '<div class="flow-detial-item">',
+                            '<p class="text-muted mb-none">' + num + '.' + DetailData.WorkFlowDetail[key].Name + '</p>',
+                            '<p class="message">默认审核人：' + DetailData.WorkFlowDetail[key].DefualtAuditRealName + '</p>',
+                            '</div><div class="flow-detial-action">',
+                            '<span class="hvr-icon-bob"></span>',
+                            '<span href="#modalDetailEdit" onclick="initFlowDetailId(this)" id=' + DetailData.WorkFlowDetail[key].Id + ' class="hvr-icon-edit modal-with-zoom-anim detail"></span>',
+                            '</div></li>'
+                        ].join('');
+                    };
+                    $('#Step').empty();
+                    $('#Step').append(stepHtml);
+                    StepClick();
+                }
+               
+            }
+        })
+    }
+    var StepClick = function () {
+        $("#Step li").each(function () {
+            $(this).click(function () {
+                var id = $(this).attr("class");
+                $("#StepValue").val(id);
+                alert($("#StepValue").val());
+                $(this).attr("style", "background:#E0E0E0").siblings().attr("style", "background:");
+            })
         })
     }
     //打开弹窗前执行
@@ -232,10 +308,15 @@
         $("#DepartmentId").empty();
         depSelectInit($(this).val());
     });
+    $("#StepDep").change(function () {
+        $("#DefualtAuditUserId").empty();
+        userSelectInit($(this).val());
+    })
     $('#flowDetailAdd').click(function () {
         $('#FlowDetialId').val("");
         $("#detailEditModalForm").find("input").val("");
-        userSelectInit();
+        StepDepSelectInit();
+        stepData();
     });
     //弹框数据提交
     $('.modal-confirm.edit').on('click', function (e) {
@@ -263,22 +344,36 @@
     //请求组织结构树
     flowTreeInit();
     $(document).on('click', '.modal-confirm.detailEdit', function (e) {
-        var data={
-            Id:$('#FlowDetialId').val(),
-            WorkFlowId:$('#flowId').val(),
-            Name:$('#FlowDetialName').val(),
-            Step:$('#Step').val(),
-            CompanyId:$('#flowCompanyId').val(),
-            DepartmentId:$('#flowDepartmentId').val(),
-            DefualtAuditUserId:$('#DefualtAuditUserId').val()
-        };
-        ModalDataSubmit({
-            e:e,
-            url:subDataDetailUrl,
-            data:JSON.stringify(data),
-            reload:false,
-            callback: flowInfoInit
-        });
+        if ($('#StepDep').val() == "请选择部门")
+        {
+            if ($('#FlowDetialName').val() == "")
+            {
+
+            }
+            if ($("#StepValue").val() == "")
+            {
+            }
+        }
+        else
+        {
+            var data = {
+                Id: $('#FlowDetialId').val(),
+                WorkFlowId: $('#flowId').val(),
+                Name: $('#FlowDetialName').val(),
+                CompanyId: $('#flowCompanyId').val(),
+                DepartmentId: $('#StepDep').val(),
+                DefualtAuditUserId: $('#DefualtAuditUserId').val(),
+                Step: $("#StepValue").val()
+            };
+            ModalDataSubmit({
+                e: e,
+                url: subDataDetailUrl,
+                data: JSON.stringify(data),
+                reload: false,
+                callback: flowInfoInit
+            });
+        }
+        
     });
 }).apply(this, [jQuery]);
 

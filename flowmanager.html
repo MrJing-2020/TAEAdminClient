@@ -169,10 +169,20 @@
                             <input type="text" id="FlowDetialName" name="FlowDetialName" class="form-control input-sm" />
                         </div>
                     </div>
+                    <input type="hidden" id="StepValue" />
                     <div class="form-group">
-                        <label class="col-md-2 control-label">次序</label>
+                        <label class="col-md-2 control-label">步骤</label>
+                        <div class="timeline timeline-simple mt-xlg mb-md col-md-9">
+                            <span style="color:red" id="Ts"></span>
+                            <div class="tm-body" style="padding: 0px;">
+                                <ol class="tm-items" id="Step"></ol>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">部门</label>
                         <div class="col-md-9">
-                            <input type="text" id="Step" name="Step" class="form-control input-sm" />
+                            <select class="form-control input-sm" id="StepDep" name="StepDep"></select>
                         </div>
                     </div>
                     <div class="form-group">
