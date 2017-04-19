@@ -200,14 +200,44 @@ function ModalDataSubmit(param) {
 }
 
 $(function () {
-    if (window.location.hash.substring(1) != '') {
-        LoadMainContent(window.location.hash.substring(1))
-    } else {
-        LoadMainContent('main')
-    }
-    $('.a-route').click(function () {
-        LoadMainContent($(this).attr("href").substring(1));
-    });
+    RequestByAjax({
+        url: "api/UserCenter/MyCenter/GetMyInfoAndAuthority",
+        type: 'GET',
+        data: {},
+        success: function (response) {
+            CONSTANT.USER_INFO=response.userInfo;
+            CONSTANT.OPERATION_VALUE=response.operation;
+            var menuList=CONSTANT.OPERATION_VALUE;
+            var menuListHeml='';
+            for(var key in menuList){
+                menuListHeml+=[
+                    '<li id="menu-'+menuList[key].Menu.MenuHtmlUrl.substring(1)+'">',
+                    '<a href='+menuList[key].Menu.MenuHtmlUrl+' class="a-route">',
+                    '<i class="'+menuList[key].Menu.MenuIco+'" aria-hidden="true"></i>',
+                    '<span>'+menuList[key].Menu.MenuName+'</span>',
+                    '</a></li>'
+                ].join('');
+                var actions=menuList[key].Actions;
+                //菜单对应的html url(不包括‘#’ 例：usermanager)
+                var menuUrl=menuList[key].Menu.MenuHtmlUrl.substring(1);
+                var actionValues=new Array();
+                for(var actionKey in actions){
+                    var actionName=actions[actionKey].MenuName;
+                    actionValues.push(CONSTANT.ACTION_NAME[actionName])
+                }
+                CONSTANT.ACTION_VALUE[menuUrl]=actionValues;
+            }
+            $('#menuListContent').append(menuListHeml);
+            if (window.location.hash.substring(1) != '') {
+                LoadMainContent(window.location.hash.substring(1))
+            } else {
+                LoadMainContent('main')
+            }
+            $('.a-route').click(function () {
+                LoadMainContent($(this).attr("href").substring(1));
+            });
+        }
+    })
     $(document).on('click', '.modal-dismiss', function (e) {
         e.preventDefault();
         $.magnificPopup.close();

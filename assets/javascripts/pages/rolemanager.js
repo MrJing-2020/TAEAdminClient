@@ -7,8 +7,29 @@
     var updateAuthorityUrl='api/Admin/Authority/UpdateAuthority';
     var getRoleDataAuthorityUrl='api/Admin/Authority/GetRoleDataAuthority';
     var updateDataAuthorityUrl='api/Admin/Authority/UpdateDataAuthority';
+    var getAllCompanyUrl='api/Admin/Organization/ComSelectList';
 
     var delUrl = "";
+    //填充公司下拉框数据
+    var comSelectInit=function () {
+        RequestByAjax({
+            url: getAllCompanyUrl,
+            type: 'GET',
+            data: {},
+            success: function (response) {
+                var optionsHtml='';
+                if(response.length>0){
+                    for(var key in response){
+                        optionsHtml+='<option value='+response[key].Key+'>'+response[key].Value+'</option>';
+                    }
+                }
+                $("#CompanyId").empty();
+                $("#CompanyId").append(optionsHtml);
+            },
+            error: function () {
+            }
+        })
+    }
     //打开弹窗前执行
     var beforeOpen = {
         edit: function () {
@@ -18,6 +39,7 @@
                 data: {id: $('#Id').val()},
                 success: function (response) {
                     $('#Name').val(response.Name);
+                    $('#CompanyId').val(response.CompanyId);
                 },
                 error: function () {
                 }
@@ -130,11 +152,14 @@
                     data: "Name"
                 },
                 {
+                    data: "CompanyName"
+                },
+                {
                     className: 'actions table-td',
                     data: "Id",
                     render: function (data, type, row, meta) {
                         var trHtml = '';
-                        trHtml += '<button href="#modalEdit" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim edit mb-xs mt-xs mr-xs btn btn-xs btn-primary"><i class="fa fa-edit"></i> </button>';
+                        trHtml += '<button href="#modalEdit" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim edit mb-xs mt-xs mr-xs btn btn-xs btn-primary authority-action authority-edit"><i class="fa fa-edit"></i> </button>';
                         trHtml += '<button href="#modalDelete" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-danger"><i class="fa fa-remove"></i> </button>';
                         trHtml += '<button href="#modalAllocation" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim allocation mb-xs mt-xs mr-xs btn btn-xs btn-info"><i class="fa fa-user"></i> </button>';
                         trHtml += '<button href="#modalAllocationData" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim allocationData mb-xs mt-xs mr-xs btn btn-xs btn-warning"><i class="fa fa-database"></i> </button>';
@@ -143,7 +168,13 @@
                 }
             ],
             success: function () {
-                ModalInit(beforeOpen)
+                var antions=CONSTANT.ACTION_VALUE['rolemanager'];
+                alert(antions);
+                for(var key in antions){
+                    $('.authority-'+antions[key]).css("display","none");
+                }
+                ModalInit(beforeOpen);
+                comSelectInit();
             }
         });
     };

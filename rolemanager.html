@@ -26,14 +26,15 @@
             <thead>
             <tr>
                 <th>角色名</th>
+                <th>公司</th>
                 <th>操作</th>
             </tr>
             </thead>
             <tbody id="tbodyContent">
             </tbody>
-            <tfoot>
+            <tfoot class="authority-action authority-edit">
             <tr>
-                <td colspan="2" class="tfoot-td">
+                <td colspan="3" class="tfoot-td">
                     <button id="addNewItem" href="#modalEdit"
                             class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-primary">
                         Add<i class="fa fa-plus"></i>
@@ -56,6 +57,13 @@
                             <div class="col-sm-9">
                                 <input type="text" id="Name" name="Name" class="form-control" placeholder=""
                                        required/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">公司</label>
+                            <div class="col-md-9">
+                                <select class="form-control input-sm" id="CompanyId" name="CompanyId">
+                                </select>
                             </div>
                         </div>
                     </form>

@@ -108,7 +108,7 @@
     </div>
     <input type="hidden" id="FlowDetialId" name="FlowDetialId"/>
     <!-- 弹出框 -->
-    <div id="modalEdit" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
+    <div id="modalEdit" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide" >
         <section class="panel">
             <header class="panel-heading">
                 <h2 class="panel-title">编辑工作流</h2>
@@ -155,7 +155,7 @@
             </footer>
         </section>
     </div>
-    <div id="modalDetailEdit" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide">
+    <div id="modalDetailEdit" class="zoom-anim-dialog modal-block modal-block-primary mfp-hide" >
         <section class="panel">
             <header class="panel-heading">
                 <h2 class="panel-title">工作流步骤</h2>
@@ -170,7 +170,7 @@
                         </div>
                     </div>
                     <input type="hidden" id="StepValue" />
-                    <div class="form-group">
+                    <div class="form-group" id="bz">
                         <label class="col-md-2 control-label">步骤</label>
                         <div class="timeline timeline-simple mt-xlg mb-md col-md-9">
                             <span style="color:red" id="Ts"></span>
@@ -188,8 +188,7 @@
                     <div class="form-group">
                         <label class="col-md-2 control-label">默认审核人</label>
                         <div class="col-md-9">
-                            <select class="form-control input-sm" id="DefualtAuditUserId" name="DefualtAuditUserId">
-                            </select>
+                            <select class="form-control input-sm" id="DefualtAuditUserId" name="DefualtAuditUserId"></select>
                         </div>
                     </div>
                 </form>
@@ -198,7 +197,7 @@
                 <div class="row">
                     <div class="col-md-12 text-right">
                         <button class="btn btn-primary modal-confirm detailEdit">提交</button>
-                        <button class="btn btn-default modal-dismiss">取消</button>
+                        <button class="btn btn-default modal-dismiss" id="btnFl">取消</button>
                     </div>
                 </div>
             </footer>

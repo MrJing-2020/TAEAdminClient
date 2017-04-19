@@ -40,7 +40,8 @@ var CONSTANT = {
                 }
             }
         },
-        RENDER: {   //常用render可以抽取出来，如日期时间、头像等
+        RENDER: {
+            //常用render可以抽取出来，如日期时间、头像等
             ELLIPSIS: function (data, type, row, meta) {
                 data = data||"";
                 return '<span title="' + data + '">' + data + '</span>';
@@ -48,5 +49,11 @@ var CONSTANT = {
         }
     },
     //权限值
-    POWER_VALUE:''
+    OPERATION_VALUE:[],
+    USER_INFO:{},
+    ACTION_VALUE:{},
+    ACTION_NAME:{
+        "编辑":"edit",
+        "删除":"delete"
+    }
 };
