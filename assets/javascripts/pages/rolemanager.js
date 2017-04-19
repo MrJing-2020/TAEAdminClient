@@ -169,7 +169,7 @@
             ],
             success: function () {
                 var antions=CONSTANT.ACTION_VALUE['rolemanager'];
-                alert(antions);
+                alert(CONSTANT.ACTION_VALUE['rolemanager']);
                 for(var key in antions){
                     $('.authority-'+antions[key]).css("display","none");
                 }
