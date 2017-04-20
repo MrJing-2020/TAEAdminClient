@@ -252,7 +252,7 @@
                     data:"Id",
                     render : function(data,type, row, meta) {
                         var trHtml='';
-                        trHtml += '<button href="#modalEdit" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim edit mb-xs mt-xs mr-xs btn btn-xs btn-primary"><i class="fa fa-edit"></i> </button>';
+                        trHtml += '<button href="#modalEdit" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim edit mb-xs mt-xs mr-xs btn btn-xs btn-primary authority-action authority-edit authority-hidden"><i class="fa fa-edit"></i> </button>';
                         trHtml += '<button href="#modalDelete" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-danger"><i class="fa fa-remove"></i> </button>';
                         trHtml += '<button href="#modalAllocation" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim allocation mb-xs mt-xs mr-xs btn btn-xs btn-info"><i class="fa fa-user"></i> </button>';
                         trHtml += '<button href="#modalAuthority" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim authority mb-xs mt-xs mr-xs btn btn-xs btn-success"><i class="fa fa-user-secret"></i> </button>';
@@ -261,6 +261,8 @@
                 }
             ],
             success: function () {
+                //按权限显示按钮
+                ShowActionbtn('usermanager');
                 ModalInit(beforeOpen);
             }
         });

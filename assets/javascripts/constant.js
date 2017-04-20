@@ -54,6 +54,9 @@ var CONSTANT = {
     ACTION_VALUE:{},
     ACTION_NAME:{
         "编辑":"edit",
-        "删除":"delete"
+        "删除":"delete",
+        "操作权限分配":"authorityOperation",
+        "数据权限分配":"authorityData",
+        "角色分配":"roleAllocation"
     }
 };

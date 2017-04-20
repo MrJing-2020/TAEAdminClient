@@ -199,6 +199,12 @@ function ModalDataSubmit(param) {
     });
 }
 
+function ShowActionbtn(pageName) {
+    for(var key in CONSTANT.ACTION_VALUE[pageName]){
+        $('.authority-'+CONSTANT.ACTION_VALUE[pageName][key]).removeClass("authority-hidden");
+    }
+}
+
 $(function () {
     RequestByAjax({
         url: "api/UserCenter/MyCenter/GetMyInfoAndAuthority",
@@ -217,6 +223,7 @@ $(function () {
                     '<span>'+menuList[key].Menu.MenuName+'</span>',
                     '</a></li>'
                 ].join('');
+                //讲权限按钮存储到全局变量CONSTANT.ACTION_NAME中
                 var actions=menuList[key].Actions;
                 //菜单对应的html url(不包括‘#’ 例：usermanager)
                 var menuUrl=menuList[key].Menu.MenuHtmlUrl.substring(1);
@@ -228,6 +235,7 @@ $(function () {
                 CONSTANT.ACTION_VALUE[menuUrl]=actionValues;
             }
             $('#menuListContent').append(menuListHeml);
+            //加载右侧内容
             if (window.location.hash.substring(1) != '') {
                 LoadMainContent(window.location.hash.substring(1))
             } else {
