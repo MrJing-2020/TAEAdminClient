@@ -4,7 +4,7 @@
     var listUrl = 'api/Admin/MenuManager/AllMenus';
     var detailUrl = 'api/Admin/MenuManager/GetMenuDetail';
     var subDataUrl = 'api/Admin/MenuManager/SubMenuData';
-    var delUrl = "";
+    var delUrl = "api/Admin/MenuManager/DelMenu";
     var getActionsUrl = 'api/Admin/MenuManager/GetActions';
     var subActionUrl = 'api/Admin/MenuManager/SubAction';
     var getParMenusUrl='api/Admin/MenuManager/GetParMenus';
@@ -157,7 +157,7 @@
         ModalDataSubmit({
             e:e,
             url:delUrl,
-            data:$('#Id').val(),
+            data:JSON.stringify({'id':$('#Id').val()}),
             reload:true
         });
     });

@@ -9,7 +9,7 @@
     var updateDataAuthorityUrl='api/Admin/Authority/UpdateDataAuthority';
     var getAllCompanyUrl='api/Admin/Organization/ComSelectList';
 
-    var delUrl = "";
+    var delUrl = "api/Admin/RoleManager/DelRole";
     //填充公司下拉框数据
     var comSelectInit=function () {
         RequestByAjax({
@@ -134,7 +134,7 @@
         ModalDataSubmit({
             e:e,
             url:delUrl,
-            data:$('#Id').val(),
+            data:JSON.stringify({id:$('#Id').val()}),
             reload:true
         });
     });

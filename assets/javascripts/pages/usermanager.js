@@ -4,7 +4,7 @@
     var detailUrl='api/Admin/UserManager/GetUserDetail';
     var subDataUrl='api/Admin/UserManager/SubUserData';
     var getRoleUrl='api/Admin/UserManager/GetRoleByUser';
-    var delUrl="";
+    var delUrl="api/Admin/UserManager/DelUser";
     var allocationUrl="api/Admin/UserManager/RoleAllocationSub";
     var authoritylUrl="api/Admin/Authority/GetUserAuthority";
     var getComSelectUrl='api/Admin/Organization/ComSelectList';
@@ -217,7 +217,7 @@
         ModalDataSubmit({
             e:e,
             url:delUrl,
-            data:$('#Id').val(),
+            data:JSON.stringify({'id':$('#Id').val()}),
             reload:true
         });
     });
