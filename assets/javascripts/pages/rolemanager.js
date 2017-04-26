@@ -160,9 +160,9 @@
                     render: function (data, type, row, meta) {
                         var trHtml = '';
                         trHtml += '<button href="#modalEdit" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim edit mb-xs mt-xs mr-xs btn btn-xs btn-primary authority-action authority-edit authority-hidden"><i class="fa fa-edit"></i> </button>';
-                        trHtml += '<button href="#modalDelete" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-danger"><i class="fa fa-remove"></i> </button>';
-                        trHtml += '<button href="#modalAllocation" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim allocation mb-xs mt-xs mr-xs btn btn-xs btn-info"><i class="fa fa-user"></i> </button>';
-                        trHtml += '<button href="#modalAllocationData" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim allocationData mb-xs mt-xs mr-xs btn btn-xs btn-warning"><i class="fa fa-database"></i> </button>';
+                        trHtml += '<button href="#modalDelete" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-danger authority-action authority-delete authority-hidden"><i class="fa fa-remove"></i> </button>';
+                        trHtml += '<button href="#modalAllocation" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim allocation mb-xs mt-xs mr-xs btn btn-xs btn-info authority-action authority-authorityOperation authority-hidden"><i class="fa fa-user"></i> </button>';
+                        trHtml += '<button href="#modalAllocationData" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim allocationData mb-xs mt-xs mr-xs btn btn-xs btn-warning authority-action authority-authorityData authority-hidden"><i class="fa fa-database"></i> </button>';
                         return trHtml;
                     }
                 }

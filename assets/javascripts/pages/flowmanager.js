@@ -140,17 +140,6 @@
             }
         })
     }
-    //function FlowTop(FlowId) {
-    //    alert(FlowId);
-    //    alert(flowDetailTop);
-    //    RequestByAjax({
-    //        url: flowDetailTop,
-    //        data: FlowId,
-    //        success: function (response) {
-    //            alert("aa");
-    //        }
-    //    });
-    //}
     //填充部门下拉框数据
     var depSelectInit = function (comId, callback) {
         RequestByAjax({
@@ -225,6 +214,29 @@
     }
     //次序列表展示
     var stepData = function (callback) {
+        RequestByAjax({
+            url: getDepSelectUrl,
+            type: 'GET',
+            data: { id: $("#flowCompanyId").val() },
+            success: function (response) {
+                var optionsHtml = '';
+                if (response.length > 0) {
+                    for (var key in response) {
+                        optionsHtml += '<optgroup label=' + response[key].Value + '><option value="analysis">Analysis</option></optgroup>';
+                    }
+                }
+                if (optionsHtml == '') {
+                    optionsHtml += '<optgroup></optgroup>';
+                }
+                $(".aaa").empty();
+                $(".aaa").append(optionsHtml);
+                if (callback != undefined && callback != null) {
+                    callback();
+                }
+            },
+            error: function () {
+            }
+        });
         RequestByAjax({
             url: flowAndDetailUrl,
             type: 'GET',
@@ -304,8 +316,10 @@
                     })
                 }
             });
+            
         }
     }
+
     $('#addNewItem').on('click', function () {
         $('#editModalForm').find('input').val("");
     });

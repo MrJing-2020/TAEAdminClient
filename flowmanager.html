@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="assets/vendor/bootstrap-multiselect/bootstrap-multiselect.css" />
 <header class="page-header">
     <h2>工作流管理</h2>
 </header>
@@ -168,7 +169,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <!--<div class="form-group">
                         <label class="col-md-2 control-label">部门</label>
                         <div class="col-md-9">
                             <select class="form-control input-sm" id="StepDep" name="StepDep"></select>
@@ -178,6 +179,26 @@
                         <label class="col-md-2 control-label">默认审核人</label>
                         <div class="col-md-9">
                             <select class="form-control input-sm" id="DefualtAuditUserId" name="DefualtAuditUserId"></select>
+                        </div>
+                    </div>-->
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">审核人</label>
+                        <div class="col-md-9">
+                            <select class="form-control aaa" multiple="multiple" data-plugin-multiselect data-plugin-options='{ "enableCaseInsensitiveFiltering": true }' id="ms_example6" >
+                                    <!--<optgroup label="Mathematics">
+                                        <option value="analysis">Analysis</option>
+                                        <option value="algebra">Linear Algebra</option>
+                                        <option value="discrete">Discrete Mathematics</option>
+                                        <option value="numerical">Numerical Analysis</option>
+                                        <option value="probability">Probability Theory</option>
+                                    </optgroup>
+                                    <optgroup label="Computer Science">
+                                        <option value="programming">Introduction to Programming</option>
+                                        <option value="automata">Automata Theory</option>
+                                        <option value="complexity">Complexity Theory</option>
+                                        <option value="software">Software Engineering</option>
+                                    </optgroup>-->
+                            </select>
                         </div>
                     </div>
                 </form>
@@ -195,5 +216,5 @@
 </div>
 
 
-
+<script src="assets/vendor/bootstrap-multiselect/bootstrap-multiselect.js"></script>
 <script type="text/javascript" src="assets/javascripts/pages/flowmanager.js"></script>
