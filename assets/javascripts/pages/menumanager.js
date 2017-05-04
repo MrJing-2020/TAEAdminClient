@@ -4,7 +4,7 @@
     var listUrl = 'api/Admin/MenuManager/AllMenus';
     var detailUrl = 'api/Admin/MenuManager/GetMenuDetail';
     var subDataUrl = 'api/Admin/MenuManager/SubMenuData';
-    var delUrl = "";
+    var delUrl = "api/Admin/MenuManager/DelMenu";
     var getActionsUrl = 'api/Admin/MenuManager/GetActions';
     var subActionUrl = 'api/Admin/MenuManager/SubAction';
     var getParMenusUrl='api/Admin/MenuManager/GetParMenus';
@@ -157,7 +157,7 @@
         ModalDataSubmit({
             e:e,
             url:delUrl,
-            data:$('#Id').val(),
+            data:JSON.stringify({'id':$('#Id').val()}),
             reload:true
         });
     });
@@ -209,8 +209,8 @@
                     data: "Id",
                     render: function (data, type, row, meta) {
                         var trHtml = '';
-                        trHtml += '<button href="#modalEdit" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim edit mb-xs mt-xs mr-xs btn btn-xs btn-primary"><i class="fa fa-edit"></i> </button>';
-                        trHtml += '<button href="#modalDelete" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-danger"><i class="fa fa-remove"></i> </button>';
+                        trHtml += '<button href="#modalEdit" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim edit mb-xs mt-xs mr-xs btn btn-xs btn-primary authority-action authority-edit authority-hidden"><i class="fa fa-edit"></i> </button>';
+                        trHtml += '<button href="#modalDelete" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-danger authority-action authority-delete authority-hidden"><i class="fa fa-remove"></i> </button>';
                         if(row.IsParent==false){
                             trHtml += '<button href="#modalDetail" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim detail mb-xs mt-xs mr-xs btn btn-xs btn-info"><i class="fa fa-eye"></i> </button>';
                         }
@@ -219,6 +219,8 @@
                 }
             ],
             success: function () {
+                //按权限显示按钮
+                ShowActionbtn('menumanager');
                 ModalInit(beforeOpen)
             }
         });

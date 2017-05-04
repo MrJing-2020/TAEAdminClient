@@ -4,7 +4,7 @@
     var detailUrl='api/Admin/UserManager/GetUserDetail';
     var subDataUrl='api/Admin/UserManager/SubUserData';
     var getRoleUrl='api/Admin/UserManager/GetRoleByUser';
-    var delUrl="";
+    var delUrl="api/Admin/UserManager/DelUser";
     var allocationUrl="api/Admin/UserManager/RoleAllocationSub";
     var authoritylUrl="api/Admin/Authority/GetUserAuthority";
     var getComSelectUrl='api/Admin/Organization/ComSelectList';
@@ -217,7 +217,7 @@
         ModalDataSubmit({
             e:e,
             url:delUrl,
-            data:$('#Id').val(),
+            data:JSON.stringify({'id':$('#Id').val()}),
             reload:true
         });
     });
@@ -252,15 +252,17 @@
                     data:"Id",
                     render : function(data,type, row, meta) {
                         var trHtml='';
-                        trHtml += '<button href="#modalEdit" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim edit mb-xs mt-xs mr-xs btn btn-xs btn-primary"><i class="fa fa-edit"></i> </button>';
-                        trHtml += '<button href="#modalDelete" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-danger"><i class="fa fa-remove"></i> </button>';
-                        trHtml += '<button href="#modalAllocation" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim allocation mb-xs mt-xs mr-xs btn btn-xs btn-info"><i class="fa fa-user"></i> </button>';
+                        trHtml += '<button href="#modalEdit" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim edit mb-xs mt-xs mr-xs btn btn-xs btn-primary authority-action authority-edit authority-hidden"><i class="fa fa-edit"></i> </button>';
+                        trHtml += '<button href="#modalDelete" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim other mb-xs mt-xs mr-xs btn btn-xs btn-danger authority-action authority-delete authority-hidden"><i class="fa fa-remove"></i> </button>';
+                        trHtml += '<button href="#modalAllocation" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim allocation mb-xs mt-xs mr-xs btn btn-xs btn-info authority-action authority-roleAllocation authority-hidden"><i class="fa fa-user"></i> </button>';
                         trHtml += '<button href="#modalAuthority" onclick="InitKey(this)" trkey="' + data + '" class="modal-with-zoom-anim authority mb-xs mt-xs mr-xs btn btn-xs btn-success"><i class="fa fa-user-secret"></i> </button>';
                         return trHtml;
                     }
                 }
             ],
             success: function () {
+                //按权限显示按钮
+                ShowActionbtn('usermanager');
                 ModalInit(beforeOpen);
             }
         });
